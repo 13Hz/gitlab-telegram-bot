@@ -8,10 +8,5 @@ return [
     'gitlab' => [
         'header' => env('GITLAB_WEBHOOK_TOKEN_HEADER', 'x-gitlab-token'),
         'token' => env('GITLAB_WEBHOOK_TOKEN', 'YOUR_TOKEN'),
-    ],
-    'commands' => [
-        'paths' => [
-            env('TELEGRAM_BOT_COMMANDS_PATH')
-        ]
     ]
 ];

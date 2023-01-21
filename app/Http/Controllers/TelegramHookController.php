@@ -14,9 +14,9 @@ class TelegramHookController extends Controller
         if($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token'))
         {
             $hookRequest = new \App\Models\Gitlab\Request($request->all());
-            Log::info(print_r($request->all(), true));
             $link = Link::where('link', '=', $hookRequest->project->web_url)->first();
             if($link) {
+                $name = preg_replace("/(\W)/", '\\\$1', $hookRequest->project->path_with_namespace);
                 $text = "[{$hookRequest->project->path_with_namespace}]({$hookRequest->project->web_url})\n";
                 $text .= "Пользователь [{$hookRequest->user->username}](https://gitlab.com/{$hookRequest->user->username}) ";
 
@@ -34,25 +34,33 @@ class TelegramHookController extends Controller
                     };
 
                     $text .= match ($hookRequest->type) {
-                        "issue" => "[задачу №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
-                        "merge_request" => "[запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
-                        default => "[объект]({$hookRequest->objectAttributes->url})",
+                        "issue" => "[issue]({$hookRequest->objectAttributes->url}) [#{$hookRequest->objectAttributes->iid}]",
+                        "merge_request" => "[merge request]({$hookRequest->objectAttributes->url}) [#{$hookRequest->objectAttributes->iid}]",
+                        default => "[object]({$hookRequest->objectAttributes->url})",
                     };
                 }
 
                 $chats = $link->chats()->get();
+                $ids = [];
+                Log::info($text);
                 foreach ($chats as $chat) {
-                    \Longman\TelegramBot\Request::sendMessage([
+                    $ids[] = $chat->chat_id;
+                    $response = \Longman\TelegramBot\Request::sendMessage([
                         'chat_id' => $chat->chat_id,
                         'text' => $text,
-                        'parse_mode' => 'MarkdownV2',
+                        'parse_mode' => 'Markdown',
                         'disable_web_page_preview' => true
                     ]);
+                    Log::info($response);
                 }
+
+                return "Sended in: ".implode(', ', $ids);
             }
         }
         else {
-            $telegram->addCommandsPaths(config('telegram.commands.paths'));
+            $telegram->addCommandsPaths([
+                base_path('/app/Commands')
+            ]);
             $telegram->handle();
         }
     }
