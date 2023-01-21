@@ -1,3 +1,5 @@
+![image](https://user-images.githubusercontent.com/39442071/213874761-b6a43733-4683-4450-994a-cfbf9642691c.png)
+
 ## Интеграция Gitlab и Telegram-bot API
 
 Телеграм-бот для оповещения об операциях, совершенных в установленных Gitlab репозиториях
