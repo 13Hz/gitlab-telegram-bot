@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/39442071/213874761-b6a43733-4683-4450-994a-cfbf9642691c.png)
+![image](https://user-images.githubusercontent.com/39442071/213875462-0756d564-ac1f-43c8-b533-9d218f4cfedc.png)
 
 ## Интеграция Gitlab и Telegram-bot API
 
