@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Link;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Longman\TelegramBot\Telegram;
+
+class TelegramHookController extends Controller
+{
+    public function handle(Request $request) {
+        $telegram = new Telegram(config('telegram.bot.token'), config('telegram.bot.name'));
+        if($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token'))
+        {
+            $hookRequest = new \App\Models\Gitlab\Request($request->all());
+            Log::info(print_r($request->all(), true));
+            $link = Link::where('link', '=', $hookRequest->project->web_url)->first();
+            if($link) {
+                $text = "[{$hookRequest->project->path_with_namespace}]({$hookRequest->project->web_url})\n";
+                $text .= "Пользователь [{$hookRequest->user->username}](https://gitlab.com/{$hookRequest->user->username}) ";
+
+                if($hookRequest->objectAttributes->action === 'merge') {
+                    $text .= "слил изменения из ветки `{$hookRequest->objectAttributes->source_branch}` в `{$hookRequest->objectAttributes->target_branch}`\n";
+                    $text .= "[Запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})";
+                }
+                else {
+                    $text .= match ($hookRequest->objectAttributes->action) {
+                        "close" => "закрыл ",
+                        "reopen" => "пересоздал ",
+                        "update" => "изменил ",
+                        "open" => "создал ",
+                        default => "затронул ",
+                    };
+
+                    $text .= match ($hookRequest->type) {
+                        "issue" => "[задачу №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
+                        "merge_request" => "[запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
+                        default => "[объект]({$hookRequest->objectAttributes->url})",
+                    };
+                }
+
+                $chats = $link->chats()->get();
+                foreach ($chats as $chat) {
+                    \Longman\TelegramBot\Request::sendMessage([
+                        'chat_id' => $chat->chat_id,
+                        'text' => $text,
+                        'parse_mode' => 'MarkdownV2',
+                        'disable_web_page_preview' => true
+                    ]);
+                }
+            }
+        }
+        else {
+            $telegram->addCommandsPaths(config('telegram.commands.paths'));
+            $telegram->handle();
+        }
+    }
+}
