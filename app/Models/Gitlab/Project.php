@@ -2,20 +2,22 @@
 
 namespace App\Models\Gitlab;
 
+use App\Models\Json;
+
 class Project {
 
-    public $id;
-    public $name;
-    public $description;
-    public $web_url;
-    public $path_with_namespace;
+    public string | null $id;
+    public string | null $name;
+    public string | null $description;
+    public string | null $web_url;
+    public string | null $path_with_namespace;
 
-    public function __construct($data)
+    public function __construct(Json $data)
     {
-        $this->id = $data['id'];
-        $this->name = $data['name'];
-        $this->description = $data['description'];
-        $this->web_url = $data['web_url'];
-        $this->path_with_namespace = $data['path_with_namespace'];
+        $this->id = $data->get('id');
+        $this->name = $data->get('name');
+        $this->description = $data->get('description');
+        $this->web_url = $data->get('web_url');
+        $this->path_with_namespace = $data->get('path_with_namespace');
     }
 }

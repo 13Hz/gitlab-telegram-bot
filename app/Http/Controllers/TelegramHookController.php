@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Json;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,16 +14,19 @@ class TelegramHookController extends Controller
         $telegram = new Telegram(config('telegram.bot.token'), config('telegram.bot.name'));
         if($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token'))
         {
-            $hookRequest = new \App\Models\Gitlab\Request($request->all());
+            $hookRequest = new \App\Models\Gitlab\Request(new Json($request->all()));
+            Log::info(print_r($request->all(), true));
             $link = Link::where('link', '=', $hookRequest->project->web_url)->first();
             if($link) {
-                $name = preg_replace("/(\W)/", '\\\$1', $hookRequest->project->path_with_namespace);
                 $text = "[{$hookRequest->project->path_with_namespace}]({$hookRequest->project->web_url})\n";
                 $text .= "Пользователь [{$hookRequest->user->username}](https://gitlab.com/{$hookRequest->user->username}) ";
 
                 if($hookRequest->objectAttributes->action === 'merge') {
                     $text .= "слил изменения из ветки `{$hookRequest->objectAttributes->source_branch}` в `{$hookRequest->objectAttributes->target_branch}`\n";
                     $text .= "[Запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})";
+                }
+                if($hookRequest->type === 'note') {
+                    $text .= "оставил [комментарий]({$hookRequest->objectAttributes->url}) к {$hookRequest->objectAttributes->noteable_type}";
                 }
                 else {
                     $text .= match ($hookRequest->objectAttributes->action) {
@@ -34,33 +38,25 @@ class TelegramHookController extends Controller
                     };
 
                     $text .= match ($hookRequest->type) {
-                        "issue" => "[issue]({$hookRequest->objectAttributes->url}) [#{$hookRequest->objectAttributes->iid}]",
-                        "merge_request" => "[merge request]({$hookRequest->objectAttributes->url}) [#{$hookRequest->objectAttributes->iid}]",
-                        default => "[object]({$hookRequest->objectAttributes->url})",
+                        "issue" => "[задачу №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
+                        "merge_request" => "[запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
+                        default => "[объект]({$hookRequest->objectAttributes->url})",
                     };
                 }
 
                 $chats = $link->chats()->get();
-                $ids = [];
-                Log::info($text);
                 foreach ($chats as $chat) {
-                    $ids[] = $chat->chat_id;
-                    $response = \Longman\TelegramBot\Request::sendMessage([
+                    \Longman\TelegramBot\Request::sendMessage([
                         'chat_id' => $chat->chat_id,
                         'text' => $text,
-                        'parse_mode' => 'Markdown',
+                        'parse_mode' => 'MarkdownV2',
                         'disable_web_page_preview' => true
                     ]);
-                    Log::info($response);
                 }
-
-                return "Sended in: ".implode(', ', $ids);
             }
         }
         else {
-            $telegram->addCommandsPaths([
-                base_path('/app/Commands')
-            ]);
+            $telegram->addCommandsPaths(config('telegram.commands.paths'));
             $telegram->handle();
         }
     }

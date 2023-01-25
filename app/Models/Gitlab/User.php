@@ -2,25 +2,20 @@
 
 namespace App\Models\Gitlab;
 
-class User {
-    public int $id; // json:id Required
-    public string $name; // json:name Required
-    public string $username; // json:username Required
-    public string $avatar_url; // json:avatar_url Required
-    public string $email; // json:email Required
+use App\Models\Json;
 
-    /**
-     * @param int $id
-     * @param string $name
-     * @param string $username
-     * @param string $avatarURL
-     * @param string $email
-     */
-    public function __construct($data) {
-        $this->id = $data['id'];
-        $this->name = $data['name'];
-        $this->username = $data['username'];
-        $this->avatar_url = $data['avatar_url'];
-        $this->email = $data['email'];
+class User {
+    public int | null $id;
+    public string | null $name;
+    public string | null $username;
+    public string | null $avatar_url;
+    public string | null $email;
+
+    public function __construct(Json $data) {
+        $this->id = $data->get('id');
+        $this->name = $data->get('name');
+        $this->username = $data->get('username');
+        $this->avatar_url = $data->get('avatar_url');
+        $this->email = $data->get('email');
     }
 }

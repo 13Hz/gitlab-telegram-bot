@@ -2,6 +2,8 @@
 
 namespace App\Models\Gitlab;
 
+use App\Models\Json;
+
 class Request {
     /**
      * @var string
@@ -20,11 +22,11 @@ class Request {
 
     public ObjectAttributes $objectAttributes;
 
-    public function __construct($data)
+    public function __construct(Json $data)
     {
-        $this->type = $data['event_type'];
-        $this->user = new User($data['user']);
-        $this->project = new Project($data['project']);
-        $this->objectAttributes = new ObjectAttributes($data['object_attributes']);
+        $this->type = $data->get('event_type');
+        $this->user = new User(new Json($data->get('user')));
+        $this->project = new Project(new Json($data->get('project')));
+        $this->objectAttributes = new ObjectAttributes(new Json($data->get('object_attributes')));
     }
 }
