@@ -54,12 +54,13 @@ class TelegramHookController extends Controller
                     ]);
                 }
 
-                return "Sended in: ".implode(', ', $ids);
+                return "Recipients: ".implode(', ', $ids);
             }
         }
         else {
             $telegram->addCommandsPaths(config('telegram.commands.paths'));
             $telegram->handle();
         }
+        return "ok";
     }
 }
