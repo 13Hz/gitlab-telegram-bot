@@ -15,11 +15,10 @@ class TelegramHookController extends Controller
         if($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token'))
         {
             $hookRequest = new \App\Models\Gitlab\Request(new Json($request->all()));
-            Log::info(print_r($request->all(), true));
             $link = Link::where('link', '=', $hookRequest->project->web_url)->first();
             if($link) {
                 $text = "[{$hookRequest->project->path_with_namespace}]({$hookRequest->project->web_url})\n";
-                $text .= "Пользователь [{$hookRequest->user->username}](https://gitlab.com/{$hookRequest->user->username}) ";
+                $text .= "Пользователь [{$hookRequest->user->username}]({$request->header('X-Gitlab-Instance')}/{$hookRequest->user->username}) ";
 
                 if($hookRequest->objectAttributes->action === 'merge') {
                     $text .= "слил изменения из ветки `{$hookRequest->objectAttributes->source_branch}` в `{$hookRequest->objectAttributes->target_branch}`\n";
@@ -46,13 +45,16 @@ class TelegramHookController extends Controller
 
                 $chats = $link->chats()->get();
                 foreach ($chats as $chat) {
+                    $ids[] = $chat->chat_id;
                     \Longman\TelegramBot\Request::sendMessage([
                         'chat_id' => $chat->chat_id,
                         'text' => $text,
-                        'parse_mode' => 'MarkdownV2',
+                        'parse_mode' => 'Markdown',
                         'disable_web_page_preview' => true
                     ]);
                 }
+
+                return "Sended in: ".implode(', ', $ids);
             }
         }
         else {
