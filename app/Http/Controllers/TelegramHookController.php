@@ -37,9 +37,9 @@ class TelegramHookController extends Controller
                     };
 
                     $text .= match ($hookRequest->type) {
-                        "issue" => "[задачу №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
-                        "merge_request" => "[запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
-                        default => "[объект]({$hookRequest->objectAttributes->url})",
+                        "issue" => "[issue №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
+                        "merge_request" => "[merge request №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})",
+                        default => "[object]({$hookRequest->objectAttributes->url})",
                     };
                 }
 
