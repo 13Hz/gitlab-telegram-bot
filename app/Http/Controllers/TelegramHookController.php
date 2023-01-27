@@ -24,7 +24,7 @@ class TelegramHookController extends Controller
                     $text .= "слил изменения из ветки `{$hookRequest->objectAttributes->source_branch}` в `{$hookRequest->objectAttributes->target_branch}`\n";
                     $text .= "[Запрос на слияние №{$hookRequest->objectAttributes->iid}]({$hookRequest->objectAttributes->url})";
                 }
-                if($hookRequest->type === 'note') {
+                else if($hookRequest->type === 'note') {
                     $text .= "оставил [комментарий]({$hookRequest->objectAttributes->url}) к {$hookRequest->objectAttributes->noteable_type}";
                 }
                 else {
