@@ -12,7 +12,12 @@ class Chat extends Model
 
     protected $fillable = [
         'chat_id',
+        'is_admin',
         'type',
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean'
     ];
 
     public function links(): BelongsToMany {

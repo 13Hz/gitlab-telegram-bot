@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('chat_id');
             $table->unique('chat_id');
+            $table->boolean('is_admin')->default(false);
             $table->string('type');
             $table->timestamps();
         });

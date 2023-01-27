@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
 use App\Models\Json;
 use App\Models\Link;
 use Illuminate\Http\Request;
@@ -58,7 +59,8 @@ class TelegramHookController extends Controller
             }
         }
         else {
-            $telegram->addCommandsPaths([app_path('/Commands')]);
+            $telegram->enableAdmins(Chat::where('is_admin', true)->pluck('chat_id')->toArray());
+            $telegram->setCommandsPaths([app_path('/Commands')]);
             $telegram->handle();
         }
         return "ok";

@@ -2,12 +2,13 @@
 
 namespace App\Commands;
 
+use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
-class TestCommand extends UserCommand {
+class TestCommand extends AdminCommand {
     protected $name = 'test';                      // Your command's name
     protected $description = 'A command for test'; // Your command description
     protected $usage = '/test';                    // Usage of your command
