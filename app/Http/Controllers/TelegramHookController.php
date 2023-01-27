@@ -58,7 +58,7 @@ class TelegramHookController extends Controller
             }
         }
         else {
-            $telegram->addCommandsPaths(config('telegram.commands.paths'));
+            $telegram->addCommandsPaths([app_path('/Commands')]);
             $telegram->handle();
         }
         return "ok";
