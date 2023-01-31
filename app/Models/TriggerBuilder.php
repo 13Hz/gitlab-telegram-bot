@@ -8,7 +8,8 @@ use App\Models\Gitlab\Request;
 class TriggerBuilder implements Builder
 {
     private Trigger $trigger;
-    private string $text = "";
+    private string $text = '';
+    protected string $objectName = 'объект';
 
     public function __construct(Request $request)
     {
@@ -46,12 +47,21 @@ class TriggerBuilder implements Builder
 
     public function addRepositoryLink(): void
     {
-        $this->addLine("[{$this->getTrigger()->getRepositoryName()}]({$this->getTrigger()->getRepositoryLink()})");
+        $repositoryName = $this->getTrigger()->getRepositoryName();
+        $repositoryLink = $this->getTrigger()->getRepositoryLink();
+
+        $this->addLine("[$repositoryName]($repositoryLink)");
     }
 
     public function addUserActionText(): void
     {
-        $this->addLine("Пользователь [{$this->getTrigger()->getUserName()}]({$this->getTrigger()->getUserProfileLink()}) {$this->getAction()} [объект #{$this->getTrigger()->getObjectId()}]({$this->getTrigger()->getObjectUrl()})");
+        $userName = $this->getTrigger()->getUserName();
+        $userLink = $this->getTrigger()->getUserProfileLink();
+        $objectId = $this->getTrigger()->getObjectId();
+        $objectUrl = $this->getTrigger()->getObjectUrl();
+        $action = $this->getAction();
+
+        $this->addLine("Пользователь [$userName]($userLink) $action $this->objectName [#$objectId]($objectUrl)");
     }
 
     public function getMessage(): string

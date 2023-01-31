@@ -5,6 +5,7 @@ namespace App\Factories;
 use App\Builders\Builder;
 use App\Builders\IssueBuilder;
 use App\Builders\MergeRequestBuilder;
+use App\Builders\OtherBuilder;
 use App\Models\Gitlab\Request;
 
 class BuilderFactory
@@ -12,7 +13,6 @@ class BuilderFactory
     /**
      * @param Request $request
      * @return Builder
-     * @throws \Exception
      */
     public static function factory(Request $request): Builder
     {
@@ -23,7 +23,8 @@ class BuilderFactory
         {
             return new MergeRequestBuilder($request);
         }
-
-        throw new \Exception("Builder not found");
+        else {
+            return new OtherBuilder($request);
+        }
     }
 }
