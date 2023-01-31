@@ -1,4 +1,7 @@
 # ![image](https://user-images.githubusercontent.com/39442071/213875462-0756d564-ac1f-43c8-b533-9d218f4cfedc.png)
+![GitHub issues](https://img.shields.io/github/issues-raw/13Hz/gitlab-telegram-bot)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/13Hz/gitlab-telegram-bot)
+![GitHub](https://img.shields.io/github/license/13Hz/gitlab-telegram-bot)
 
 Телеграм-бот для оповещения об операциях, совершенных в установленных Gitlab репозиториях. Мнгновенно отправляет уведомления в приватные и общие чаты.
 
