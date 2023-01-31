@@ -35,7 +35,7 @@ class Trigger
         return "$site/{$this->request->user->username}";
     }
 
-    public function getObjectId(): string
+    public function getObjectId(): mixed
     {
         return $this->request->objectAttributes->iid;
     }

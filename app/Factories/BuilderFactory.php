@@ -5,6 +5,7 @@ namespace App\Factories;
 use App\Builders\Builder;
 use App\Builders\IssueBuilder;
 use App\Builders\MergeRequestBuilder;
+use App\Builders\NoteBuilder;
 use App\Builders\OtherBuilder;
 use App\Models\Gitlab\Request;
 
@@ -22,6 +23,10 @@ class BuilderFactory
         else if($request->type === 'merge_request')
         {
             return new MergeRequestBuilder($request);
+        }
+        else if($request->type === 'note')
+        {
+            return new NoteBuilder($request);
         }
         else {
             return new OtherBuilder($request);
