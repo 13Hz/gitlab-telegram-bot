@@ -61,7 +61,7 @@ class TriggerBuilder implements Builder
         $objectUrl = $this->getTrigger()->getObjectUrl();
         $action = $this->getAction();
 
-        $this->addLine("Пользователь [$userName]($userLink) $action $this->objectName [#$objectId]($objectUrl)");
+        $this->addLine("Пользователь [$userName]($userLink) $action $this->objectName [№$objectId]($objectUrl)");
     }
 
     public function getMessage(): string

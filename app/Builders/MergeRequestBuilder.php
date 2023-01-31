@@ -22,7 +22,7 @@ class MergeRequestBuilder extends TriggerBuilder
         }
         else
         {
-            $this->addLine("Пользователь [$userName]($userLink) {$this->getAction()} merge request [№$objectId]($objectUrl)");
+            parent::addUserActionText();
         }
     }
 }
