@@ -28,8 +28,10 @@ class Trigger
         return $this->request->user->username;
     }
 
-    public function getUserProfileLink($site): string
+    public function getUserProfileLink(): string
     {
+        $site = $this->request->headers['X-Gitlab-Instance'];
+
         return "$site/{$this->request->user->username}";
     }
 

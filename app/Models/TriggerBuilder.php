@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Builders\Builder;
 use App\Models\Gitlab\Request;
 
-class TriggerBuilder
+class TriggerBuilder implements Builder
 {
     private Trigger $trigger;
     private string $text = "";
@@ -30,5 +31,36 @@ class TriggerBuilder
 
     public function getText(): string {
         return $this->text;
+    }
+
+    public function getAction(): string
+    {
+        return match ($this->getRequest()->objectAttributes->action) {
+            "close" => "закрыл",
+            "reopen" => "пересоздал",
+            "update" => "изменил",
+            "open" => "создал",
+            default => "затронул",
+        };
+    }
+
+    public function addRepositoryLink(): void
+    {
+        $this->addLine("[{$this->getTrigger()->getRepositoryName()}]({$this->getTrigger()->getRepositoryLink()})");
+    }
+
+    public function addUserActionText(): void
+    {
+        $this->addLine("Пользователь [{$this->getTrigger()->getUserName()}]({$this->getTrigger()->getUserProfileLink()}) {$this->getAction()} [объект #{$this->getTrigger()->getObjectId()}]({$this->getTrigger()->getObjectUrl()})");
+    }
+
+    public function addAdditionalText(): void
+    {
+        // TODO: Implement addAdditionalText() method.
+    }
+
+    public function getMessage(): string
+    {
+        return $this->getText();
     }
 }
