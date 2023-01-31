@@ -8,6 +8,19 @@ class MergeRequestBuilder extends TriggerBuilder
 {
     public function addUserActionText(): void
     {
-        $this->addLine("Пользователь [{$this->getTrigger()->getUserName()}]({$this->getTrigger()->getUserProfileLink()}) {$this->getAction()} [merge request #{$this->getTrigger()->getObjectId()}]({$this->getTrigger()->getObjectUrl()})");
+        $userName = $this->getTrigger()->getUserName();
+        $userLink = $this->getTrigger()->getUserProfileLink();
+        $objectId = $this->getTrigger()->getObjectId();
+        $objectUrl = $this->getTrigger()->getObjectUrl();
+
+        if($this->getRequest()->objectAttributes->action === 'merge')
+        {
+            $this->addLine("Пользователь [$userName]($userLink) слил изменения из ветки `{$this->getRequest()->objectAttributes->source_branch}` в `{$this->getRequest()->objectAttributes->target_branch}`");
+            $this->addLine("[Merge request #$objectId]($objectUrl)");
+        }
+        else
+        {
+            $this->addLine("Пользователь [$userName]($userLink) {$this->getAction()} [merge request #$objectId]($objectUrl)");
+        }
     }
 }

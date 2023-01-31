@@ -54,11 +54,6 @@ class TriggerBuilder implements Builder
         $this->addLine("Пользователь [{$this->getTrigger()->getUserName()}]({$this->getTrigger()->getUserProfileLink()}) {$this->getAction()} [объект #{$this->getTrigger()->getObjectId()}]({$this->getTrigger()->getObjectUrl()})");
     }
 
-    public function addAdditionalText(): void
-    {
-        // TODO: Implement addAdditionalText() method.
-    }
-
     public function getMessage(): string
     {
         return $this->getText();
