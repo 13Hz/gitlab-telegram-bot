@@ -14,15 +14,15 @@ class Request {
 
     public ObjectAttributes $objectAttributes;
 
-    public mixed $headers;
+    public string $host;
 
-    public function __construct(Json $data, mixed $headers = null)
+    public function __construct(Json $data, $host = null)
     {
         $this->type = $data->get('event_type');
         $this->user = new User(new Json($data->get('user')));
         $this->project = new Project(new Json($data->get('project')));
         $this->objectAttributes = new ObjectAttributes(new Json($data->get('object_attributes')));
 
-        $this->headers = $headers;
+        $this->host = $host;
     }
 }

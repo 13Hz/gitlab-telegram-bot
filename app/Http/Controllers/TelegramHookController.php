@@ -16,7 +16,7 @@ class TelegramHookController extends Controller
         $telegram = new Telegram(config('telegram.bot.token'), config('telegram.bot.name'));
         if($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token'))
         {
-            $hookRequest = new \App\Models\Gitlab\Request(new Json($request->all()), $request->headers);
+            $hookRequest = new \App\Models\Gitlab\Request(new Json($request->all()), $request->header('X-Gitlab-Instance'));
             $link = Link::where('link', '=', $hookRequest->project->web_url)->first();
             if($link) {
 
