@@ -10,16 +10,16 @@ use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
 class AddCommand extends UserCommand {
-    protected $name = 'add';                      // Your command's name
-    protected $description = 'Добавить гитлаб репозиторий для получения уведомлений'; // Your command description
-    protected $usage = '/add';                    // Usage of your command
-    protected $version = '1.0.0';                  // Version of your command
+    protected $name = 'add';
+    protected $description = 'Добавить гитлаб репозиторий для получения уведомлений';
+    protected $usage = '/add';
+    protected $version = '1.0.0';
 
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();            // Get Message object
+        $message = $this->getMessage();
 
-        $chat_id = $message->getChat()->getId();   // Get the current Chat ID
+        $chat_id = $message->getChat()->getId();
         $linkText = trim($message->getText(true));
         if($linkText && preg_match('/^http[s]?:\/\/\S+\.\S+?\/\S+?\/\S+?$/', $linkText)) {
 
@@ -60,11 +60,11 @@ class AddCommand extends UserCommand {
             $text = "Некорректный формат ссылки\n";
             $text .= "/add <ссылка>";
         }
-        $data = [                                  // Set up the new message data
-            'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-            'text'    => $text, // Set message to send
+        $data = [
+            'chat_id' => $chat_id,
+            'text'    => $text,
         ];
 
-        return Request::sendMessage($data);        // Send message!
+        return Request::sendMessage($data);
     }
 }

@@ -9,10 +9,10 @@ use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
 class HelpCommand extends UserCommand {
-    protected $name = 'help';                      // Your command's name
-    protected $description = 'Список доступных команд'; // Your command description
-    protected $usage = '/help';                    // Usage of your command
-    protected $version = '1.0.0';                  // Version of your command
+    protected $name = 'help';
+    protected $description = 'Список доступных команд';
+    protected $usage = '/help';
+    protected $version = '1.0.0';
 
     private function getCommandsText($commands) {
         $text = "";
@@ -29,8 +29,8 @@ class HelpCommand extends UserCommand {
 
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();            // Get Message object
-        $chat = $message->getChat();   // Get the current Chat ID
+        $message = $this->getMessage();
+        $chat = $message->getChat();
 
         $commands = $this->telegram->getCommandsList();
 
@@ -51,11 +51,11 @@ class HelpCommand extends UserCommand {
             $text .= $this->getCommandsText($adminCommands);
         }
 
-        $data = [                                  // Set up the new message data
-            'chat_id' => $chat->getId(),                 // Set Chat ID to send the message to
-            'text'    => $text, // Set message to send
+        $data = [
+            'chat_id' => $chat->getId(),
+            'text'    => $text,
         ];
 
-        return Request::sendMessage($data);        // Send message!
+        return Request::sendMessage($data);
     }
 }
