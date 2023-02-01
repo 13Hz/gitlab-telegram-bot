@@ -8,16 +8,17 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
-class StartCommand extends UserCommand {
+class StartCommand extends UserCommand
+{
     protected $private_only = false;
-    protected $name = 'start';                      // Your command's name
-    protected $description = 'Регистрация чата и запуск бота'; // Your command description
-    protected $usage = '/start';                    // Usage of your command
-    protected $version = '1.0.0';                  // Version of your command
+    protected $name = 'start';
+    protected $description = 'Регистрация чата и запуск бота';
+    protected $usage = '/start';
+    protected $version = '1.0.0';
 
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();            // Get Message object
+        $message = $this->getMessage();
         $chat = $message->getChat();
 
         $exist = Chat::where('chat_id', $chat->getId())->first();
@@ -35,18 +36,18 @@ class StartCommand extends UserCommand {
 
             if($model) {
                 $text = "Чат успешно зарегистрирован\n";
-                $text .= "Введите /add <ссылка> для получения уведомлений из указанного репозитория";
+                $text .= "Введите /help для получения списка доступных команд";
             }
             else {
                 $text = "Произошла ошибка при добавлении чата в базу";
             }
         }
 
-        $data = [                                  // Set up the new message data
-            'chat_id' => $chat->getId(),                 // Set Chat ID to send the message to
-            'text'    => $text, // Set message to send
+        $data = [
+            'chat_id' => $chat->getId(),
+            'text'    => $text,
         ];
 
-        return Request::sendMessage($data);        // Send message!
+        return Request::sendMessage($data);
     }
 }
