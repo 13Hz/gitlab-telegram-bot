@@ -15,6 +15,7 @@ define('TB_BASE_PATH', app_path());
 class TelegramHookController extends Controller
 {
     public function handle(Request $request) {
+        $telegram = new Telegram(config('telegram.bot.token'), config('telegram.bot.name'));
         if($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token'))
         {
             $hookRequest = new \App\Models\Gitlab\Request(new Json($request->all()), $request->header('X-Gitlab-Instance'));
@@ -38,7 +39,6 @@ class TelegramHookController extends Controller
             }
         }
         else {
-            $telegram = new Telegram(config('telegram.bot.token'), config('telegram.bot.name'));
             $telegram->enableAdmins(Chat::where('is_admin', true)->pluck('chat_id')->toArray());
             $telegram->setCommandsPath(app_path('Commands'))->handle();
         }
