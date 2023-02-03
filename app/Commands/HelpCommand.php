@@ -2,26 +2,26 @@
 
 namespace App\Commands;
 
-use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
-class HelpCommand extends UserCommand {
+class HelpCommand extends UserCommand
+{
     protected $name = 'help';
     protected $description = 'Список доступных команд';
     protected $usage = '/help';
     protected $version = '1.0.0';
 
-    private function getCommandsText($commands) {
-        $text = "";
+    private function getCommandsText($commands)
+    {
+        $text = '';
         foreach ($commands as $command) {
             $name = $command->getName();
             $description = $command->getDescription();
 
-            if($name && $description) {
-                $text .= "/$name - $description\n";
+            if ($name && $description) {
+                $text .= "/$name - $description".PHP_EOL;
             }
         }
         return $text;
@@ -34,19 +34,18 @@ class HelpCommand extends UserCommand {
 
         $commands = $this->telegram->getCommandsList();
 
-        $userCommands = array_filter($commands, function ($command){
+        $userCommands = array_filter($commands, function ($command) {
             return $command->isUserCommand();
         });
 
-        $adminCommands = array_filter($commands, function ($command){
+        $adminCommands = array_filter($commands, function ($command) {
             return $command->isAdminCommand();
         });
 
         $text = "Список доступных команд:\n\n";
         $text .= $this->getCommandsText($userCommands);
 
-        if($adminCommands)
-        {
+        if ($adminCommands) {
             $text .= "\n===== АДМИН-ОБЛАСТЬ =====\n\n";
             $text .= $this->getCommandsText($adminCommands);
         }

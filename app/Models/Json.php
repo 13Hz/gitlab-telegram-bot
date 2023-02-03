@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-class Json {
+class Json
+{
     private $data;
 
     public function __construct($data)
@@ -10,7 +11,8 @@ class Json {
         $this->data = $data;
     }
 
-    public function get($key) {
+    public function get($key)
+    {
         return $this->data[$key] ?? null;
     }
 }

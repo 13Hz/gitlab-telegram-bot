@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-class InlineKeyboard extends \Longman\TelegramBot\Entities\InlineKeyboard {
+class InlineKeyboard extends \Longman\TelegramBot\Entities\InlineKeyboard
+{
     public function __construct($rows)
     {
         $data = $this->createFromRows($rows);

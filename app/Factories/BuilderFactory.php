@@ -17,18 +17,13 @@ class BuilderFactory
      */
     public static function factory(Request $request): Builder
     {
-        if($request->type === 'issue') {
+        if ($request->type === 'issue') {
             return new IssueBuilder($request);
-        }
-        else if($request->type === 'merge_request')
-        {
+        } elseif ($request->type === 'merge_request') {
             return new MergeRequestBuilder($request);
-        }
-        else if($request->type === 'note')
-        {
+        } elseif ($request->type === 'note') {
             return new NoteBuilder($request);
-        }
-        else {
+        } else {
             return new OtherBuilder($request);
         }
     }

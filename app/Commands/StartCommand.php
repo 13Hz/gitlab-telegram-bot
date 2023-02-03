@@ -5,12 +5,10 @@ namespace App\Commands;
 use App\Models\Chat;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
 class StartCommand extends UserCommand
 {
-    protected $private_only = false;
     protected $name = 'start';
     protected $description = 'Регистрация чата и запуск бота';
     protected $usage = '/start';
@@ -23,22 +21,18 @@ class StartCommand extends UserCommand
 
         $exist = Chat::where('chat_id', $chat->getId())->first();
 
-        if($exist)
-        {
+        if ($exist) {
             $text = "Чат уже присутствует в базе";
-        }
-        else
-        {
+        } else {
             $model = Chat::create([
                 'chat_id' => $chat->getId(),
                 'type' => $chat->getType(),
             ]);
 
-            if($model) {
+            if ($model) {
                 $text = "Чат успешно зарегистрирован\n";
                 $text .= "Введите /help для получения списка доступных команд";
-            }
-            else {
+            } else {
                 $text = "Произошла ошибка при добавлении чата в базу";
             }
         }

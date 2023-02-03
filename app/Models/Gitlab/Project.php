@@ -4,8 +4,8 @@ namespace App\Models\Gitlab;
 
 use App\Models\Json;
 
-class Project {
-
+class Project
+{
     public string | null $id;
     public string | null $name;
     public string | null $description;

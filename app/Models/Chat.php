@@ -20,7 +20,8 @@ class Chat extends Model
         'is_admin' => 'boolean'
     ];
 
-    public function links(): BelongsToMany {
+    public function links(): BelongsToMany
+    {
         return $this->belongsToMany(Link::class);
     }
 }

@@ -6,10 +6,10 @@ use App\Models\Chat;
 use App\Models\Link;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
-class AddCommand extends UserCommand {
+class AddCommand extends UserCommand
+{
     protected $name = 'add';
     protected $description = 'Добавить гитлаб репозиторий для получения уведомлений';
     protected $usage = '/add';
@@ -19,9 +19,9 @@ class AddCommand extends UserCommand {
     {
         $message = $this->getMessage();
 
-        $chat_id = $message->getChat()->getId();
+        $chatId = $message->getChat()->getId();
         $linkText = trim($message->getText(true));
-        if($linkText && preg_match('/^http[s]?:\/\/\S+\.\S+?\/\S+?\/\S+?$/', $linkText)) {
+        if ($linkText && preg_match('/^http[s]?:\/\/\S+\.\S+?\/\S+?\/\S+?$/', $linkText)) {
 
             $linkText = rtrim($linkText, '/');
 
@@ -29,39 +29,32 @@ class AddCommand extends UserCommand {
                 'link' => $linkText
             ]);
 
-            if($link)
-            {
+            if ($link) {
                 $chat = Chat::firstOrcreate([
-                    'chat_id' => $chat_id,
+                    'chat_id' => $chatId,
                     'type' => $message->getChat()->type,
                 ]);
 
-                if($chat) {
+                if ($chat) {
                     try {
                         $chat->links()->attach($link->id);
-                        $text = "Ссылка успешно добавлена";
+                        $text = 'Ссылка успешно добавлена';
+                    } catch (\Exception $exception) {
+                        $text = 'В этом чате уже есть такая ссылка';
                     }
-                    catch (\Exception $exception) {
-                        $text = "В этом чате уже есть такая ссылка";
-                    }
+                } else {
+                    $text = 'При добавлении ссылки произошла ошибка';
                 }
-                else
-                {
-                    $text = "При добавлении ссылки произошла ошибка";
-                }
+            } else {
+                $text = 'При добавлении ссылки произошла ошибка';
             }
-            else
-            {
-                $text = "При добавлении ссылки произошла ошибка";
-            }
+        } else {
+            $text = 'Некорректный формат ссылки'.PHP_EOL;
+            $text .= '/add <ссылка>';
         }
-        else
-        {
-            $text = "Некорректный формат ссылки\n";
-            $text .= "/add <ссылка>";
-        }
+
         $data = [
-            'chat_id' => $chat_id,
+            'chat_id' => $chatId,
             'text'    => $text,
         ];
 
