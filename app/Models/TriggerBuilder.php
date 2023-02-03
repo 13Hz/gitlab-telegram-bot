@@ -26,11 +26,13 @@ class TriggerBuilder implements Builder
         return $this->trigger->getRequest();
     }
 
-    public function addLine(string $line): void {
+    public function addLine(string $line): void
+    {
         $this->text .= $line.PHP_EOL;
     }
 
-    public function getText(): string {
+    public function getText(): string
+    {
         return $this->text;
     }
 

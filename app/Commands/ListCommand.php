@@ -4,11 +4,8 @@ namespace App\Commands;
 
 use App\Models\Chat;
 use App\Models\InlineKeyboard;
-use App\Models\Link;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Request;
 
 class ListCommand extends UserCommand
 {
@@ -21,7 +18,7 @@ class ListCommand extends UserCommand
     {
         $chatId = $this->getMessage()->getChat()->getId();
         $linksButtons = self::getLinksButtons($chatId);
-        if($linksButtons) {
+        if ($linksButtons) {
             return $this->replyToChat('Список добавленных репозиториев', [
                 'reply_markup' => $linksButtons,
             ]);
@@ -29,9 +26,10 @@ class ListCommand extends UserCommand
         return $this->replyToChat('Список репозиториев пуст');
     }
 
-    public static function getLinksButtons($chatId) {
+    public static function getLinksButtons($chatId)
+    {
         $chat = Chat::where('chat_id', $chatId)->first();
-        if($chat) {
+        if ($chat) {
             $links = $chat->links()->get();
 
             if ($links) {

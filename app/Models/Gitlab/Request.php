@@ -4,16 +4,13 @@ namespace App\Models\Gitlab;
 
 use App\Models\Json;
 
-class Request {
-
+class Request
+{
     public string $type;
 
     public User $user;
-
     public Project $project;
-
     public ObjectAttributes $objectAttributes;
-
     public string $host;
 
     public function __construct(Json $data, $host = null)

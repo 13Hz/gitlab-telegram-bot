@@ -18,17 +18,19 @@ class Link extends Model
         'repository_name'
     ];
 
-    public function getRepositoryNameAttribute() {
+    public function getRepositoryNameAttribute()
+    {
         $link = $this->link;
         $matches = null;
         preg_match('/^http[s]?:\/\/.*?\/(.*)$/', $link, $matches);
-        if($matches) {
+        if ($matches) {
             return $matches[1];
         }
         return null;
     }
 
-    public function chats(): BelongsToMany {
+    public function chats(): BelongsToMany
+    {
         return $this->belongsToMany(Chat::class);
     }
 }

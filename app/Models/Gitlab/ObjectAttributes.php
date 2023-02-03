@@ -4,8 +4,8 @@ namespace App\Models\Gitlab;
 
 use App\Models\Json;
 
-class ObjectAttributes {
-
+class ObjectAttributes
+{
     public string | null $title;
     public string | null $description;
     public string | null $url;
@@ -16,7 +16,8 @@ class ObjectAttributes {
     public string | null $noteable_type;
     public string | null $note;
 
-    public function __construct(Json $data) {
+    public function __construct(Json $data)
+    {
         $this->title = $data->get('title');
         $this->description = $data->get('description');
         $this->url = $data->get('url');
