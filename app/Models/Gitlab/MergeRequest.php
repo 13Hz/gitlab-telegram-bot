@@ -9,7 +9,7 @@ class MergeRequest
     public int $assignee_id;
     public int $author_id;
     public int $iid;
-    public string $merge_status;
+    public null | string $merge_status;
     public string $source_branch;
     public string $target_branch;
 
