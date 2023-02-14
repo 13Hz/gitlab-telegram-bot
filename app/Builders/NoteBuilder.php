@@ -14,7 +14,8 @@ class NoteBuilder extends TriggerBuilder
         $userLink = $this->getTrigger()->getUserProfileLink();
         $objectUrl = $this->getTrigger()->getObjectUrl();
         $noteableType = $this->getRequest()->objectAttributes->noteable_type;
+        $iid = $this->getRequest()->objectAttributes->iid;
 
-        $this->addLine("Пользователь [$userName]($userLink) оставил [комментарий]($objectUrl) к $noteableType");
+        $this->addLine("Пользователь [$userName]($userLink) оставил [комментарий]($objectUrl) к $noteableType №$iid");
     }
 }
