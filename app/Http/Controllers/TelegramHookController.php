@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Factories\BuilderFactory;
 use App\Models\Chat;
+use App\Models\CreatedObject;
 use App\Models\Json;
 use App\Models\Link;
 use App\Models\TelegramMessage;
@@ -26,12 +27,31 @@ class TelegramHookController extends Controller
                 $chats = $link->chats()->get();
                 foreach ($chats as $chat) {
                     $ids[] = $chat->chat_id;
-                    \Longman\TelegramBot\Request::sendMessage([
+
+                    $data = [
                         'chat_id' => $chat->chat_id,
                         'text' => TelegramMessage::build($builder),
                         'parse_mode' => 'Markdown',
                         'disable_web_page_preview' => true
-                    ]);
+                    ];
+
+                    if ($hookRequest->objectAttributes->iid) {
+                        $createdObject = CreatedObject::where('object_id', $hookRequest->objectAttributes->iid)
+                            ->where('chat_id', $chat->chat_id)->first();
+                        if ($createdObject) {
+                            $data['reply_to_message_id'] = $createdObject->message_id;
+                        }
+                    }
+
+                    $response = \Longman\TelegramBot\Request::sendMessage($data);
+
+                    if ($response->isOk() && $hookRequest->objectAttributes->action === 'open' && $hookRequest->objectAttributes->iid) {
+                        CreatedObject::create([
+                            'object_id' => $hookRequest->objectAttributes->iid,
+                            'chat_id' => $chat->chat_id,
+                            'message_id' => $response->getResult()->getMessageId()
+                        ]);
+                    }
                 }
 
                 return "Recipients: ".implode(', ', $ids);
