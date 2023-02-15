@@ -23,6 +23,7 @@ class TelegramHookController extends Controller
             $link = Link::where('link', '=', $hookRequest->project->web_url)->first();
             if ($link) {
                 $builder = BuilderFactory::factory($hookRequest);
+                $text = TelegramMessage::build($builder);
 
                 $chats = $link->chats()->get();
                 foreach ($chats as $chat) {
@@ -30,14 +31,16 @@ class TelegramHookController extends Controller
 
                     $data = [
                         'chat_id' => $chat->chat_id,
-                        'text' => TelegramMessage::build($builder),
+                        'text' => $text,
                         'parse_mode' => 'Markdown',
                         'disable_web_page_preview' => true
                     ];
 
-                    if ($hookRequest->objectAttributes->iid) {
+                    if ($hookRequest->objectAttributes->iid && $hookRequest->type) {
                         $createdObject = CreatedObject::where('object_id', $hookRequest->objectAttributes->iid)
-                            ->where('chat_id', $chat->chat_id)->first();
+                            ->where('chat_id', $chat->chat_id)
+                            ->where('object_type', $hookRequest->type)
+                            ->first();
                         if ($createdObject) {
                             $data['reply_to_message_id'] = $createdObject->message_id;
                         }
@@ -45,11 +48,15 @@ class TelegramHookController extends Controller
 
                     $response = \Longman\TelegramBot\Request::sendMessage($data);
 
-                    if ($response->isOk() && $hookRequest->objectAttributes->action === 'open' && $hookRequest->objectAttributes->iid) {
+                    if ($response->isOk()
+                        && $hookRequest->objectAttributes->action === 'open'
+                        && $hookRequest->objectAttributes->iid
+                        && $hookRequest->type) {
                         CreatedObject::create([
                             'object_id' => $hookRequest->objectAttributes->iid,
                             'chat_id' => $chat->chat_id,
-                            'message_id' => $response->getResult()->getMessageId()
+                            'message_id' => $response->getResult()->getMessageId(),
+                            'object_type' => $hookRequest->type
                         ]);
                     }
                 }

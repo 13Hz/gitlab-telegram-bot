@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('created_objects', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('object_id');
-            $table->unsignedBigInteger('chat_id');
+            $table->integer('chat_id');
             $table->unsignedBigInteger('message_id');
+            $table->string('object_type');
             $table->timestamps();
         });
     }

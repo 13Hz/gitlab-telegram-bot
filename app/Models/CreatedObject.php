@@ -10,6 +10,7 @@ class CreatedObject extends Model
     use HasFactory;
 
     protected $fillable = [
+        'object_type',
         'object_id',
         'chat_id',
         'message_id'
