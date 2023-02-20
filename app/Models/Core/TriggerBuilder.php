@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Core;
 
 use App\Builders\Builder;
 use App\Models\Gitlab\Request;

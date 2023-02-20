@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Factories\BuilderFactory;
 use App\Models\Chat;
+use App\Models\ChatLink;
+use App\Models\Core\Json;
+use App\Models\Core\TelegramMessage;
 use App\Models\CreatedObject;
-use App\Models\Json;
 use App\Models\Link;
-use App\Models\TelegramMessage;
+use App\Models\Trigger;
+use App\Services\ChatLinkService;
+use App\Services\TriggerFilterService;
 use Illuminate\Http\Request;
 use Longman\TelegramBot\Telegram;
 
@@ -15,7 +19,7 @@ define('TB_BASE_PATH', app_path());
 
 class TelegramHookController extends Controller
 {
-    public function handle(Request $request)
+    public function handle(Request $request, ChatLinkService $chatLinkService, TriggerFilterService $triggerFilterService)
     {
         $telegram = new Telegram(config('telegram.bot.token'), config('telegram.bot.name'));
         if ($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token')) {
@@ -27,6 +31,12 @@ class TelegramHookController extends Controller
 
                 $chats = $link->chats()->get();
                 foreach ($chats as $chat) {
+                    $chatLink = $chatLinkService->getChatLinkByEntitiesId($chat, $link);
+                    $trigger = Trigger::where('code', $hookRequest->type)->first();
+                    if (($chatLink && $trigger) && !$triggerFilterService->getTriggerState($chatLink, $trigger)) {
+                        continue;
+                    }
+
                     $ids[] = $chat->chat_id;
 
                     $data = [
