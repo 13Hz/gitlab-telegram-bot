@@ -2,7 +2,7 @@
 
 namespace App\Models\Gitlab;
 
-use App\Models\Json;
+use App\Models\Core\Json;
 
 class Project
 {

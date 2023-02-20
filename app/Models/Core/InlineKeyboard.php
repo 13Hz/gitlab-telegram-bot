@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Core;
 
 class InlineKeyboard extends \Longman\TelegramBot\Entities\InlineKeyboard
 {
