@@ -4,7 +4,10 @@ namespace App\Commands;
 
 use App\Models\Chat;
 use App\Models\ChatLink;
+use App\Models\ExcludedTrigger;
+use App\Models\Trigger;
 use App\Services\ChatButtonService;
+use App\Services\TriggerFilterService;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -25,40 +28,35 @@ class CallbackqueryCommand extends SystemCommand
         if ($chat) {
             $chatLink = ChatLink::where('chat_id', $chat->id)->where('link_id', $data['id'])->first();
             if ($data['entity'] === 'link') {
-                    $message = [
-                        'chat_id' => $chatId,
-                        'message_id' => $query->getMessage()->getMessageId(),
-                    ];
+                $message = [
+                    'chat_id' => $chatId,
+                    'message_id' => $query->getMessage()->getMessageId(),
+                ];
 
-                    if ($data['action'] === 'delete') {
-
-                        $chat?->links()->detach($data['id']);
-                    }
-
-                    $message['text'] = match ($data['action']) {
-                        'filter' => 'Выберите нужные триггеры для оповещений',
-                        'show_list' => 'Список добавленных репозиториев',
-                        default => 'Выберите действие'
-                    };
-
-                    $message['reply_markup'] = match ($data['action']) {
-                        'filter' => $chatButtonService->getFiltersKeyboard($data['id'], $chatLink),
-                        'show_buttons' => $chatButtonService->getActionsKeyboard($data['id']),
-                        default => $chatButtonService->getRepositoriesKeyboard($chatId)
-                    };
-
-                    return Request::editMessageText($message);
-            }
-            if ($data['entity'] === 'filter' && $chatLink) {
-                if ($data['action'] === 'issue') {
-                    $chatLink->issue = !$chatLink->issue;
-                } elseif ($data['action'] === 'merge_request') {
-                    $chatLink->merge_request = !$chatLink->merge_request;
-                } elseif ($data['action'] === 'note') {
-                    $chatLink->note = !$chatLink->note;
+                if ($data['action'] === 'delete') {
+                    $chat?->links()->detach($data['id']);
                 }
 
-                $chatLink->save();
+                $message['text'] = match ($data['action']) {
+                    'filter' => 'Выберите нужные триггеры для оповещений',
+                    'show_list' => 'Список добавленных репозиториев',
+                    default => 'Выберите действие'
+                };
+
+                $message['reply_markup'] = match ($data['action']) {
+                    'filter' => $chatButtonService->getFiltersKeyboard($data['id'], $chatLink),
+                    'show_buttons' => $chatButtonService->getActionsKeyboard($data['id']),
+                    default => $chatButtonService->getRepositoriesKeyboard($chatId)
+                };
+
+                return Request::editMessageText($message);
+            }
+            if ($data['entity'] === 'filter' && $chatLink) {
+                $triggerFilterService = new TriggerFilterService();
+                $trigger = Trigger::find($data['trigger']);
+                if ($trigger) {
+                    $triggerFilterService->toggleTriggerState($chatLink, $trigger);
+                }
 
                 $message = [
                     'chat_id' => $chatId,

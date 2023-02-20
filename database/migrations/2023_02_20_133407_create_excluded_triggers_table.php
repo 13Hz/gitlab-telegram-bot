@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('excluded_triggers', function (Blueprint $table) {
             $table->id();
+            $table->boolean('active')->default(true);
             $table->unsignedBigInteger('chat_link_id');
             $table->foreign('chat_link_id')->on('chat_link')->references('id');
             $table->unsignedBigInteger('trigger_id');

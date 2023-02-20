@@ -5,7 +5,8 @@ namespace App\Services;
 use App\Models\Chat;
 use App\Models\ChatLink;
 use App\Models\Core\InlineKeyboard;
-use App\Models\Core\Trigger;
+use App\Models\ExcludedTrigger;
+use App\Models\Trigger;
 
 class ChatButtonService
 {
@@ -82,57 +83,37 @@ class ChatButtonService
 
     /** Получить клавиатуру фильтрации для выбранного репозитория
      * @param ChatLink $chatLink Связка чата и репозитория
-     * @return InlineKeyboard|null Клавиатура с фильтрами
+     * @return InlineKeyboard Клавиатура с фильтрами
      */
-    public function getFiltersKeyboard(string|int $entityId, ChatLink $chatLink): InlineKeyboard|null
+    public function getFiltersKeyboard(string|int $entityId, ChatLink $chatLink): InlineKeyboard
     {
+        $triggerFilterService = new TriggerFilterService();
         $triggers = Trigger::all();
-
-        $issue =  $this->getFilterEnabledText(boolval($chatLink->issue));
-        $mergeRequest =  $this->getFilterEnabledText(boolval($chatLink->merge_request));
-        $note =  $this->getFilterEnabledText(boolval($chatLink->note));
-        return new InlineKeyboard([
+        $keyboard = [];
+        foreach ($triggers as $trigger) {
+            $enabledText = $this->getFilterEnabledText($triggerFilterService->getTriggerState($chatLink, $trigger));
+            $keyboard[] = [[
+                'text' => "$enabledText $trigger->title",
+                'callback_data' => json_encode([
+                    'entity' => 'filter',
+                    'action' => $trigger->code,
+                    'id' => $entityId,
+                    'trigger' => $trigger->id
+                ])
+            ]];
+        }
+        $keyboard[] = [
             [
-                [
-                    'text' => "$issue Issue",
-                    'callback_data' => json_encode([
-                        'entity' => 'filter',
-                        'action' => 'issue',
-                        'id' => $entityId
-                    ])
-                ]
-            ],
-            [
-                [
-                    'text' => "$mergeRequest Merge Request",
-                    'callback_data' => json_encode([
-                        'entity' => 'filter',
-                        'action' => 'merge_request',
-                        'id' => $entityId
-                    ])
-                ]
-            ],
-            [
-                [
-                    'text' => "$note Комментарий",
-                    'callback_data' => json_encode([
-                        'entity' => 'filter',
-                        'action' => 'note',
-                        'id' => $entityId
-                    ])
-                ]
-            ],
-            [
-                [
-                    'text' => 'Назад',
-                    'callback_data' => json_encode([
-                        'entity' => 'link',
-                        'action' => 'show_buttons',
-                        'id' => $entityId
-                    ])
-                ]
+                'text' => 'Назад',
+                'callback_data' => json_encode([
+                    'entity' => 'link',
+                    'action' => 'show_buttons',
+                    'id' => $entityId
+                ])
             ]
-        ]);
+        ];
+
+        return new InlineKeyboard($keyboard);
     }
 
     /**
