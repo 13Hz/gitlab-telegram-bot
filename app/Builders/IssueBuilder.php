@@ -2,7 +2,7 @@
 
 namespace App\Builders;
 
-use App\Models\TriggerBuilder;
+use App\Models\Core\TriggerBuilder;
 
 class IssueBuilder extends TriggerBuilder
 {

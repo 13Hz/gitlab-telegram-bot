@@ -3,8 +3,8 @@
 namespace App\Commands;
 
 use App\Models\Chat;
-
-use App\Models\InlineKeyboard;
+use App\Models\ChatLink;
+use App\Services\ChatButtonService;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -20,48 +20,55 @@ class CallbackqueryCommand extends SystemCommand
         $query = $this->getCallbackQuery();
         $chatId = $query->getMessage()->getChat()->getId();
         $data = json_decode($query->getData(), true);
-        if ($data['entity'] === 'link') {
-            $message = [
-                'chat_id' => $chatId,
-                'text' => 'Выберите действие',
-                'message_id' => $query->getMessage()->getMessageId(),
-            ];
+        $chatButtonService = new ChatButtonService();
+        $chat = Chat::where('chat_id', $chatId)->first();
+        if ($chat) {
+            $chatLink = ChatLink::where('chat_id', $chat->id)->where('link_id', $data['id'])->first();
+            if ($data['entity'] === 'link') {
+                    $message = [
+                        'chat_id' => $chatId,
+                        'message_id' => $query->getMessage()->getMessageId(),
+                    ];
 
-            if ($data['action'] === 'show_buttons') {
-                $message['reply_markup'] = new InlineKeyboard([
-                    [
-                        [
-                            'text' => 'Удалить',
-                            'callback_data' => json_encode([
-                                'entity' => 'link',
-                                'action' => 'delete',
-                                'id' => $data['id']
-                            ])
-                        ]
-                    ],
-                    [
-                        [
-                            'text' => 'Назад',
-                            'callback_data' => json_encode([
-                                'entity' => 'link',
-                                'action' => 'show_list',
-                                'id' => $data['id']
-                            ])
-                        ]
-                    ]
-                ]);
-            } elseif ($data['action'] === 'show_list') {
-                $message['text'] = 'Список добавленных репозиториев';
-                $message['reply_markup'] = ListCommand::getLinksButtons($chatId);
-            } elseif ($data['action'] === 'delete') {
-                $chat = Chat::where('chat_id', $chatId)->first();
-                $chat?->links()->detach($data['id']);
+                    if ($data['action'] === 'delete') {
 
-                $message['text'] = 'Список добавленных репозиториев';
-                $message['reply_markup'] = ListCommand::getLinksButtons($chatId);
+                        $chat?->links()->detach($data['id']);
+                    }
+
+                    $message['text'] = match ($data['action']) {
+                        'filter' => 'Выберите нужные триггеры для оповещений',
+                        'show_list' => 'Список добавленных репозиториев',
+                        default => 'Выберите действие'
+                    };
+
+                    $message['reply_markup'] = match ($data['action']) {
+                        'filter' => $chatButtonService->getFiltersKeyboard($data['id'], $chatLink),
+                        'show_buttons' => $chatButtonService->getActionsKeyboard($data['id']),
+                        default => $chatButtonService->getRepositoriesKeyboard($chatId)
+                    };
+
+                    return Request::editMessageText($message);
             }
+            if ($data['entity'] === 'filter' && $chatLink) {
+                if ($data['action'] === 'issue') {
+                    $chatLink->issue = !$chatLink->issue;
+                } elseif ($data['action'] === 'merge_request') {
+                    $chatLink->merge_request = !$chatLink->merge_request;
+                } elseif ($data['action'] === 'note') {
+                    $chatLink->note = !$chatLink->note;
+                }
 
-            return Request::editMessageText($message);
+                $chatLink->save();
+
+                $message = [
+                    'chat_id' => $chatId,
+                    'text' => 'Выберите нужные триггеры для оповещений',
+                    'message_id' => $query->getMessage()->getMessageId(),
+                    'reply_markup' => $chatButtonService->getFiltersKeyboard($data['id'], $chatLink),
+                ];
+
+                return Request::editMessageText($message);
+            }
         }
 
         return Request::answerCallbackQuery([
