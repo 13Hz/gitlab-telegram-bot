@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('chat_link_id');
-            $table->foreign('chat_link_id')->on('chat_link')->references('id');
+            $table->foreign('chat_link_id')->on('chat_link')->references('id')->onDelete('cascade');
             $table->unsignedBigInteger('trigger_id');
-            $table->foreign('trigger_id')->on('triggers')->references('id');
+            $table->foreign('trigger_id')->on('triggers')->references('id')->onDelete('cascade');
             $table->timestamps();
         });
     }

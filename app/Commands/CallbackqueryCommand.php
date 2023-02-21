@@ -34,7 +34,7 @@ class CallbackqueryCommand extends SystemCommand
                 ];
 
                 if ($data['action'] === 'delete') {
-                    $chat?->links()->detach($data['id']);
+                    $chat->links()->detach($data['id']);
                 }
 
                 $message['text'] = match ($data['action']) {
