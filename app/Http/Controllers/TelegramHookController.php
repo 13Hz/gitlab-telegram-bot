@@ -28,7 +28,7 @@ class TelegramHookController extends Controller
             if ($link) {
                 $builder = BuilderFactory::factory($hookRequest);
                 $text = TelegramMessage::build($builder);
-
+                $ids = [];
                 $chats = $link->chats()->get();
                 foreach ($chats as $chat) {
                     $chatLink = $chatLinkService->getChatLinkByEntitiesId($chat, $link);
@@ -48,8 +48,8 @@ class TelegramHookController extends Controller
 
                     if ($hookRequest->objectAttributes->iid && $hookRequest->type) {
                         $createdObject = CreatedObject::where('object_id', $hookRequest->objectAttributes->iid)
-                            ->where('chat_id', $chat->chat_id)
-                            ->where('object_type', $hookRequest->type)
+                            ->where('chat_id', $chat->id)
+                            ->where('trigger_id', $trigger->id)
                             ->first();
                         if ($createdObject) {
                             $data['reply_to_message_id'] = $createdObject->message_id;
@@ -64,9 +64,9 @@ class TelegramHookController extends Controller
                         && $hookRequest->type) {
                         CreatedObject::create([
                             'object_id' => $hookRequest->objectAttributes->iid,
-                            'chat_id' => $chat->chat_id,
+                            'chat_id' => $chat->id,
                             'message_id' => $response->getResult()->getMessageId(),
-                            'object_type' => $hookRequest->type
+                            'trigger_id' => $trigger->id
                         ]);
                     }
                 }

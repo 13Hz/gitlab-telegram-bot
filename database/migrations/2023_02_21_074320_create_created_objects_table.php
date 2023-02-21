@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('created_objects', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('object_id');
-            $table->integer('chat_id');
+            $table->unsignedBigInteger('chat_id');
+            $table->foreign('chat_id')->on('chats')->references('id')->onDelete('cascade');
             $table->unsignedBigInteger('message_id');
-            $table->string('object_type');
+            $table->unsignedBigInteger('trigger_id');
+            $table->foreign('trigger_id')->on('triggers')->references('id')->onDelete('cascade');
             $table->timestamps();
         });
     }
