@@ -10,7 +10,6 @@ class Issue
     public int $author_id;
     public int $iid;
 
-
     public function __construct(Json $data)
     {
         $this->assignee_id = intval($data->get('assignee_id'));

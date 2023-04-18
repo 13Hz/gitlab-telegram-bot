@@ -40,7 +40,7 @@ class Trigger
         return $this->request->objectAttributes->iid;
     }
 
-    public function getObjectUrl(): string
+    public function getObjectUrl(): mixed
     {
         return $this->request->objectAttributes->url;
     }
