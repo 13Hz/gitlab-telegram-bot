@@ -29,5 +29,10 @@ class TriggersSeeder extends Seeder
             'title' => 'Комментарий',
             'code' => 'note',
         ]);
+        \DB::table('triggers')->updateOrInsert(['id' => 4], [
+            'id' => 4,
+            'title' => 'Пайплайн',
+            'code' => 'pipeline',
+        ]);
     }
 }

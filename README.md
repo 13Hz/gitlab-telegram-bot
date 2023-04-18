@@ -17,7 +17,7 @@
 - [ ] Confidential issues events
 - [X] Merge request events
 - [ ] Job events
-- [ ] Pipeline events
+- [X] Pipeline events
 - [ ] Wiki page events
 - [ ] Deployment events
 - [ ] Feature flag events

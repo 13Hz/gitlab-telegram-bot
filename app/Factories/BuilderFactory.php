@@ -7,6 +7,7 @@ use App\Builders\IssueBuilder;
 use App\Builders\MergeRequestBuilder;
 use App\Builders\NoteBuilder;
 use App\Builders\OtherBuilder;
+use App\Builders\PipelineBuilder;
 use App\Models\Gitlab\Request;
 
 class BuilderFactory
@@ -17,14 +18,12 @@ class BuilderFactory
      */
     public static function factory(Request $request): Builder
     {
-        if ($request->type === 'issue') {
-            return new IssueBuilder($request);
-        } elseif ($request->type === 'merge_request') {
-            return new MergeRequestBuilder($request);
-        } elseif ($request->type === 'note') {
-            return new NoteBuilder($request);
-        } else {
-            return new OtherBuilder($request);
-        }
+        return match ($request->type) {
+            'issue' => new IssueBuilder($request),
+            'merge_request' => new MergeRequestBuilder($request),
+            'note' => new NoteBuilder($request),
+            'pipeline' => new PipelineBuilder($request),
+            default => new OtherBuilder($request)
+        };
     }
 }

@@ -46,7 +46,7 @@ class TelegramHookController extends Controller
                         'disable_web_page_preview' => true
                     ];
 
-                    if ($hookRequest->objectAttributes->iid && $hookRequest->type) {
+                    if ($hookRequest->objectAttributes->iid && $hookRequest->type && $trigger) {
                         $createdObject = CreatedObject::where('object_id', $hookRequest->objectAttributes->iid)
                             ->where('chat_id', $chat->id)
                             ->where('trigger_id', $trigger->id)
@@ -71,7 +71,11 @@ class TelegramHookController extends Controller
                     }
                 }
 
-                return "Recipients: ".implode(', ', $ids);
+                if (empty($ids)) {
+                    return 'Нет получателей';
+                }
+
+                return 'Получатели: ' . implode(', ', $ids);
             }
         } else {
             $telegram->enableAdmins(Chat::where('is_admin', true)->pluck('chat_id')->toArray());
