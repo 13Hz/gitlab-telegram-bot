@@ -6,10 +6,10 @@ use App\Models\Core\Json;
 
 class Commit
 {
-    public string $id;
-    public string $message;
-    public string $title;
-    public string $url;
+    public mixed $id;
+    public mixed $message;
+    public mixed $title;
+    public mixed $url;
 
     public function __construct(Json $data)
     {
