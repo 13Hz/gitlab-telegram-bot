@@ -16,7 +16,9 @@ class WebhookCommand extends Command
         try {
             $telegram = new Telegram(env('TELEGRAM_BOT_TOKEN'), env('TELEGRAM_BOT_NAME'));
 
-            $result = $telegram->setWebhook($this->argument('url'));
+            $result = $telegram->setWebhook($this->argument('url'), [
+                'secret_token' => md5(env('APP_KEY'))
+            ]);
             if ($result->isOk()) {
                 $this->info($result->getDescription());
                 return Command::SUCCESS;

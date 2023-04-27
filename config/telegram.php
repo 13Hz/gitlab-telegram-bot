@@ -8,5 +8,9 @@ return [
     'gitlab' => [
         'header' => env('GITLAB_WEBHOOK_TOKEN_HEADER', 'x-gitlab-token'),
         'token' => env('GITLAB_WEBHOOK_TOKEN', 'YOUR_TOKEN'),
-    ]
+    ],
+    'webhook' => [
+        'header' => env('TELEGRAM_WEBHOOK_TOKEN_HEADER', 'X-Telegram-Bot-Api-Secret-Token'),
+        'token' => env('TELEGRAM_WEBHOOK_TOKEN', md5(env('APP_KEY')))
+    ],
 ];

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\ChatLink;
 use App\Models\Trigger;
 use App\Models\ExcludedTrigger;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class TriggerFilterService
 {
