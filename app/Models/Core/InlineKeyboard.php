@@ -14,7 +14,7 @@ class InlineKeyboard extends \Longman\TelegramBot\Entities\InlineKeyboard
 
     private function createFromRows($args): array
     {
-        $keyboard_type = $this->getKeyboardType();
+        $keyboardType = $this->getKeyboardType();
 
         foreach ($args as &$arg) {
             !is_array($arg) && $arg = [$arg];
@@ -23,24 +23,24 @@ class InlineKeyboard extends \Longman\TelegramBot\Entities\InlineKeyboard
 
         $data = reset($args);
 
-        if ($from_data = array_key_exists($keyboard_type, (array) $data)) {
-            $args = $data[$keyboard_type];
+        if ($fromData = array_key_exists($keyboardType, (array) $data)) {
+            $args = $data[$keyboardType];
 
             if (!is_array($args)) {
                 $args = [];
             }
         }
 
-        $new_keyboard = [];
+        $newKeyboard = [];
         foreach ($args as $row) {
-            $new_keyboard[] = $this->parseRow($row);
+            $newKeyboard[] = $this->parseRow($row);
         }
 
-        if (!empty($new_keyboard)) {
-            if (!$from_data) {
+        if (!empty($newKeyboard)) {
+            if (!$fromData) {
                 $data = [];
             }
-            $data[$keyboard_type] = $new_keyboard;
+            $data[$keyboardType] = $newKeyboard;
         }
 
         return $data ?: [];

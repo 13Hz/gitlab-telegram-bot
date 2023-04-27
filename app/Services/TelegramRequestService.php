@@ -7,7 +7,6 @@ use App\Models\Chat;
 use App\Models\Core\ReceivedRequest;
 use App\Models\Core\Telegram;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class TelegramRequestService extends ReceivedRequest implements ServiceBuilder
 {

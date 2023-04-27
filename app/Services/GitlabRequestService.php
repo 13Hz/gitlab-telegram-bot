@@ -7,9 +7,6 @@ use App\Factories\BuilderFactory;
 use App\Models\Core\Json;
 use App\Models\Core\ReceivedRequest;
 use App\Models\Core\TelegramMessage;
-use App\Models\CreatedObject;
-use App\Models\Link;
-use App\Models\Trigger;
 use Illuminate\Http\Response;
 
 class GitlabRequestService extends ReceivedRequest implements ServiceBuilder

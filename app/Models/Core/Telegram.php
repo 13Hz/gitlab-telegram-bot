@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Request;
 
 define('TB_BASE_PATH', app_path());
 
@@ -21,7 +22,7 @@ class Telegram
 
     public static function sendMessage($data): ServerResponse
     {
-        \Longman\TelegramBot\Request::initialize(\App\Models\Core\Telegram::getInstance());
-        return \Longman\TelegramBot\Request::sendMessage($data);
+        Request::initialize(Telegram::getInstance());
+        return Request::sendMessage($data);
     }
 }

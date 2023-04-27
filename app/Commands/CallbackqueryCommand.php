@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\Models\Chat;
 use App\Models\ChatLink;
-use App\Models\ExcludedTrigger;
 use App\Models\Trigger;
 use App\Services\ChatButtonService;
 use App\Services\TriggerFilterService;

@@ -2,15 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Chat;
-use App\Models\ChatLink;
-use App\Models\Core\InlineKeyboard;
 use App\Models\CreatedObject;
-use App\Models\ExcludedTrigger;
 use App\Models\Gitlab\Request;
 use App\Models\Link;
 use App\Models\Trigger;
-use Illuminate\Database\Eloquent\Collection;
 
 class GitlabRepositoryService
 {
