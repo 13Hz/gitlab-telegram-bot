@@ -68,7 +68,7 @@ class GitlabRepositoryService
         ];
 
         if (!empty($replyMessageId)) {
-            $data['reply_to_message_id'] = $replyMessageId->message_id;
+            $data['reply_to_message_id'] = $replyMessageId;
         }
 
         return $data;
