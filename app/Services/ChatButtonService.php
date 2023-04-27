@@ -82,7 +82,7 @@ class ChatButtonService
     }
 
     /** Получить клавиатуру фильтрации для выбранного репозитория
-     * @param  ChatLink  $chatLink Связка чата и репозитория
+     * @param ChatLink $chatLink Связка чата и репозитория
      * @return InlineKeyboard Клавиатура с фильтрами
      */
     public function getFiltersKeyboard(string|int $entityId, ChatLink $chatLink): InlineKeyboard
