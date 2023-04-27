@@ -39,11 +39,11 @@ class TriggerBuilder implements Builder
     public function getAction(): string
     {
         return match ($this->getRequest()->objectAttributes->action) {
-            "close" => "закрыл",
-            "reopen" => "пересоздал",
-            "update" => "изменил",
-            "open" => "создал",
-            default => "затронул",
+            'close' => 'закрыл',
+            'reopen' => 'пересоздал',
+            'update' => 'изменил',
+            'open' => 'создал',
+            default => 'затронул',
         };
     }
 

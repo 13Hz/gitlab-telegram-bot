@@ -9,10 +9,9 @@ class MergeRequest
     public int $assignee_id;
     public int $author_id;
     public int $iid;
-    public null | string $merge_status;
-    public null | string $source_branch;
-    public null | string $target_branch;
-
+    public null|string $merge_status;
+    public null|string $source_branch;
+    public null|string $target_branch;
 
     public function __construct(Json $data)
     {

@@ -37,6 +37,7 @@ class ChatButtonService
                 return new InlineKeyboard($buttons);
             }
         }
+
         return null;
     }
 
@@ -81,7 +82,7 @@ class ChatButtonService
     }
 
     /** Получить клавиатуру фильтрации для выбранного репозитория
-     * @param ChatLink $chatLink Связка чата и репозитория
+     * @param  ChatLink  $chatLink Связка чата и репозитория
      * @return InlineKeyboard Клавиатура с фильтрами
      */
     public function getFiltersKeyboard(string|int $entityId, ChatLink $chatLink): InlineKeyboard
@@ -115,8 +116,7 @@ class ChatButtonService
         return new InlineKeyboard($keyboard);
     }
 
-    /**
-     * Получить текст состояния
+    /**Получить текст состояния
      * @param bool $flag
      * @return string
      */

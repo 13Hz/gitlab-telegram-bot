@@ -17,7 +17,7 @@ class ServiceFactory
     {
         if ($request->header(config('telegram.gitlab.header')) === config('telegram.gitlab.token')) {
             return new GitlabRequestService($request);
-        } elseif($request->header(config('telegram.webhook.header')) === config('telegram.webhook.token')) {
+        } elseif ($request->header(config('telegram.webhook.header')) === config('telegram.webhook.token')) {
             return new TelegramRequestService($request);
         }
 

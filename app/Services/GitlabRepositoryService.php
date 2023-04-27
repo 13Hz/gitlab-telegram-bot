@@ -23,11 +23,11 @@ class GitlabRepositoryService
      */
     public function getLinkByUrl(mixed $url): Link|null
     {
-      if (!empty($url)) {
-          return Link::where('link', '=', $url)->first();
-      }
+        if (!empty($url)) {
+            return Link::where('link', '=', $url)->first();
+        }
 
-      return null;
+        return null;
     }
 
     /**Получить список доступных чатов для отправки уведомлений (если триггера нет в системе, считается, что чат доступен для отправки)
@@ -49,6 +49,7 @@ class GitlabRepositoryService
 
             $result[] = $chat;
         }
+
         return $result;
     }
 

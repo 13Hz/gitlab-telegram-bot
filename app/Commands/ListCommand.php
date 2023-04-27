@@ -23,6 +23,7 @@ class ListCommand extends UserCommand
                 'reply_markup' => $linksButtons,
             ]);
         }
+
         return $this->replyToChat('Список репозиториев пуст');
     }
 }

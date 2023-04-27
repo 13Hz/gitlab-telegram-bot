@@ -26,6 +26,7 @@ class Link extends Model
         if ($matches) {
             return $matches[1];
         }
+
         return null;
     }
 

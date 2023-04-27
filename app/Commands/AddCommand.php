@@ -22,7 +22,6 @@ class AddCommand extends UserCommand
         $chatId = $message->getChat()->getId();
         $linkText = trim($message->getText(true));
         if ($linkText && preg_match('/^http[s]?:\/\/\S+\.\S+?\/\S+?\/\S+?$/', $linkText)) {
-
             $linkText = rtrim($linkText, '/');
 
             $link = Link::firstOrCreate([
@@ -55,7 +54,7 @@ class AddCommand extends UserCommand
 
         $data = [
             'chat_id' => $chatId,
-            'text'    => $text,
+            'text' => $text,
         ];
 
         return Request::sendMessage($data);
