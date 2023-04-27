@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Chat;
 use App\Models\ChatLink;
 use App\Models\Core\InlineKeyboard;
-use App\Models\ExcludedTrigger;
 use App\Models\Trigger;
 
 class ChatButtonService

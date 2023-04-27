@@ -10,7 +10,6 @@ class TelegramMessage
     {
         $builder->addRepositoryLink();
         $builder->addUserActionText();
-
         return $builder->getMessage();
     }
 }

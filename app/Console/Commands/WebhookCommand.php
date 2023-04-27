@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Core\Telegram;
 use Illuminate\Console\Command;
 use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Telegram;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class WebhookCommand extends Command
 {
@@ -14,17 +15,21 @@ class WebhookCommand extends Command
     public function handle()
     {
         try {
-            $telegram = new Telegram(env('TELEGRAM_BOT_TOKEN'), env('TELEGRAM_BOT_NAME'));
+            $telegram = Telegram::getInstance();
+            $result = $telegram->setWebhook($this->argument('url'), [
+                'secret_token' => config('telegram.webhook.token')
+            ]);
 
-            $result = $telegram->setWebhook($this->argument('url'));
             if ($result->isOk()) {
                 $this->info($result->getDescription());
-                return Command::SUCCESS;
+                return CommandAlias::SUCCESS;
+            } else {
+                $this->error($result->getDescription());
             }
         } catch (TelegramException $e) {
             $this->error($e->getMessage());
         }
 
-        return Command::FAILURE;
+        return CommandAlias::FAILURE;
     }
 }
