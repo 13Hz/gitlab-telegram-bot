@@ -13,7 +13,6 @@ class TelegramRequestService extends ReceivedRequest implements ServiceBuilder
 {
     public function process(): Response
     {
-        Log::info(print_r([$_REQUEST, getallheaders(), file_get_contents('php://input')], true));
         $telegram = Telegram::getInstance();
         $telegram->enableAdmins(Chat::where('is_admin', true)->pluck('chat_id')->toArray());
         $telegram->setCommandsPath(app_path('Commands'))->handle();
