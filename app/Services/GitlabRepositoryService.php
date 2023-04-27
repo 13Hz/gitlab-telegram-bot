@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Core\Telegram;
 use App\Models\CreatedObject;
 use App\Models\Gitlab\Request;
 use App\Models\Link;
@@ -97,7 +98,7 @@ class GitlabRepositoryService
                 }
             }
 
-            $response = \App\Models\Core\Telegram::sendMessage(
+            $response = Telegram::sendMessage(
                 $this->getTelegramMessageData($chat->chat_id, $text, $replyMessageId)
             );
 
