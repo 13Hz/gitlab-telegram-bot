@@ -7,7 +7,6 @@ use App\Models\Core\Json;
 class Request
 {
     public null|string $type;
-
     public User $user;
     public Project $project;
     public ObjectAttributes $objectAttributes;

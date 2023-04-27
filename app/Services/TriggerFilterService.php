@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\ChatLink;
-use App\Models\Trigger;
 use App\Models\ExcludedTrigger;
+use App\Models\Trigger;
 
 class TriggerFilterService
 {
@@ -16,6 +16,7 @@ class TriggerFilterService
     public function getTriggerState(ChatLink $chatLink, Trigger $trigger): bool
     {
         $excluded = ExcludedTrigger::where('chat_link_id', $chatLink->id)->where('trigger_id', $trigger->id)->first();
+
         return !($excluded && $excluded->active === true);
     }
 

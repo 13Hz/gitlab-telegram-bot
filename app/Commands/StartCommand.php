@@ -22,7 +22,7 @@ class StartCommand extends UserCommand
         $exist = Chat::where('chat_id', $chat->getId())->first();
 
         if ($exist) {
-            $text = "Чат уже присутствует в базе";
+            $text = 'Чат уже присутствует в базе';
         } else {
             $model = Chat::create([
                 'chat_id' => $chat->getId(),
@@ -31,15 +31,15 @@ class StartCommand extends UserCommand
 
             if ($model) {
                 $text = "Чат успешно зарегистрирован\n";
-                $text .= "Введите /help для получения списка доступных команд";
+                $text .= 'Введите /help для получения списка доступных команд';
             } else {
-                $text = "Произошла ошибка при добавлении чата в базу";
+                $text = 'Произошла ошибка при добавлении чата в базу';
             }
         }
 
         $data = [
             'chat_id' => $chat->getId(),
-            'text'    => $text,
+            'text' => $text,
         ];
 
         return Request::sendMessage($data);

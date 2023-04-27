@@ -22,6 +22,7 @@ class WebhookCommand extends Command
 
             if ($result->isOk()) {
                 $this->info($result->getDescription());
+
                 return CommandAlias::SUCCESS;
             } else {
                 $this->error($result->getDescription());

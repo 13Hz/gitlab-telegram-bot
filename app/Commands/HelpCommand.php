@@ -24,6 +24,7 @@ class HelpCommand extends UserCommand
                 $text .= "/$name - $description".PHP_EOL;
             }
         }
+
         return $text;
     }
 
@@ -52,7 +53,7 @@ class HelpCommand extends UserCommand
 
         $data = [
             'chat_id' => $chat->getId(),
-            'text'    => $text,
+            'text' => $text,
         ];
 
         return Request::sendMessage($data);

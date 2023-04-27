@@ -6,19 +6,19 @@ use App\Models\Core\Json;
 
 class ObjectAttributes
 {
-    public string | null $title;
-    public string | null $description;
-    public string | null $url;
-    public string | null $iid;
-    public int | null $id;
-    public string | null $action;
-    public string | null $source_branch;
-    public string | null $target_branch;
-    public string | null $noteable_type;
-    public string | null $note;
-    public string | null $status;
-    public int | null $duration;
-    public int | null $queued_duration;
+    public string|null $title;
+    public string|null $description;
+    public string|null $url;
+    public string|null $iid;
+    public int|null $id;
+    public string|null $action;
+    public string|null $source_branch;
+    public string|null $target_branch;
+    public string|null $noteable_type;
+    public string|null $note;
+    public string|null $status;
+    public int|null $duration;
+    public int|null $queued_duration;
 
     public function __construct(Json $data)
     {

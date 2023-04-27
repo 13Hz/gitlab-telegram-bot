@@ -6,11 +6,11 @@ use App\Models\Core\Json;
 
 class Project
 {
-    public string | null $id;
-    public string | null $name;
-    public string | null $description;
-    public string | null $web_url;
-    public string | null $path_with_namespace;
+    public string|null $id;
+    public string|null $name;
+    public string|null $description;
+    public string|null $web_url;
+    public string|null $path_with_namespace;
 
     public function __construct(Json $data)
     {

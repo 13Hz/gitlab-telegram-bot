@@ -37,6 +37,7 @@ class ChatButtonService
                 return new InlineKeyboard($buttons);
             }
         }
+
         return null;
     }
 
@@ -115,8 +116,7 @@ class ChatButtonService
         return new InlineKeyboard($keyboard);
     }
 
-    /**
-     * Получить текст состояния
+    /**Получить текст состояния
      * @param bool $flag
      * @return string
      */

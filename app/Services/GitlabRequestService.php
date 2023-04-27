@@ -22,9 +22,10 @@ class GitlabRequestService extends ReceivedRequest implements ServiceBuilder
             $ids = $gitlabRepositoryService->sendMessageToChats($link, $text);
 
             if (!empty($ids)) {
-                return \response('Получатели: ' . implode(', ', $ids));
+                return \response('Получатели: '.implode(', ', $ids));
             }
         }
+
         return \response('Нет получателей');
     }
 }

@@ -23,6 +23,7 @@ class Telegram
     public static function sendMessage($data): ServerResponse
     {
         Request::initialize(Telegram::getInstance());
+
         return Request::sendMessage($data);
     }
 }

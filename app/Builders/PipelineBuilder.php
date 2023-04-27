@@ -9,17 +9,17 @@ class PipelineBuilder extends TriggerBuilder
     protected string $objectName = 'pipeline';
 
     const AVAILABLE_STATUSES = [
-        'pending' => "⏸️",
-        'running' => "▶️",
-        'success' => "✅",
-        'canceled' => "🚫",
-        'failed' => "❌"
+        'pending' => '⏸️',
+        'running' => '▶️',
+        'success' => '✅',
+        'canceled' => '🚫',
+        'failed' => '❌'
     ];
 
     public function addUserActionText(): void
     {
         $id = $this->getRequest()->objectAttributes->id;
-        $pipelineLink = $this->getTrigger()->getRepositoryLink() . "/pipelines/$id";
+        $pipelineLink = $this->getTrigger()->getRepositoryLink()."/pipelines/$id";
         $status = $this->getRequest()->objectAttributes->status;
         $commitTitle = $this->getRequest()->commit->title;
         $commitUrl = $this->getRequest()->commit->url;
