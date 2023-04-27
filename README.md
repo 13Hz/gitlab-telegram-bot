@@ -1,4 +1,4 @@
-# ![image](https://user-images.githubusercontent.com/39442071/213875462-0756d564-ac1f-43c8-b533-9d218f4cfedc.png)
+# ![image](https://user-images.githubusercontent.com/39442071/234793633-dc38d35e-6b8e-420a-92b6-744efb69eb80.png)
 ![GitHub issues](https://img.shields.io/github/issues-raw/13Hz/gitlab-telegram-bot)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/13Hz/gitlab-telegram-bot)
 ![GitHub](https://img.shields.io/github/license/13Hz/gitlab-telegram-bot)
@@ -33,6 +33,7 @@
 ```
 Основной командой для настройки связанных Gitlab репозиториев считается `/list`, кроме вывода списка можно удалять репозитори [#5](https://github.com/13Hz/gitlab-telegram-bot/pull/5) и устанавливать фильтрацию получаемых уведомлений по типу триггеров [#12](https://github.com/13Hz/gitlab-telegram-bot/pull/12)
 
+![image](https://user-images.githubusercontent.com/39442071/234793687-73655f61-8bc2-4365-8d9f-f0f338c8fb11.png)
 
 ## Установка и настройка
 
