@@ -4,7 +4,7 @@
 ![GitHub](https://img.shields.io/github/license/13Hz/gitlab-telegram-bot)
 [![Telegram](https://img.shields.io/static/v1?label=telegram&message=@not1s_bot&color=279fda)](https://t.me/not1s_bot)
 
-[Русский](https://github.com/13Hz/gitlab-telegram-bot/README.md) | [English](https://github.com/13Hz/gitlab-telegram-bot/README.eng.md)
+[Русский](https://github.com/13Hz/gitlab-telegram-bot/blob/main/README.md) | [English](https://github.com/13Hz/gitlab-telegram-bot/blob/main/README.eng.md)
 
 Телеграм-бот для оповещения об операциях, совершенных в установленных Gitlab репозиториях. Мгновенно отправляет уведомления в приватные и общие чаты.
 
