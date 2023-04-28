@@ -4,7 +4,9 @@
 ![GitHub](https://img.shields.io/github/license/13Hz/gitlab-telegram-bot)
 [![Telegram](https://img.shields.io/static/v1?label=telegram&message=@not1s_bot&color=279fda)](https://t.me/not1s_bot)
 
-Телеграм-бот для оповещения об операциях, совершенных в установленных Gitlab репозиториях. Мнгновенно отправляет уведомления в приватные и общие чаты.
+[Русский](https://github.com/13Hz/gitlab-telegram-bot/README.md) | [English](https://github.com/13Hz/gitlab-telegram-bot/README.eng.md)
+
+Телеграм-бот для оповещения об операциях, совершенных в установленных Gitlab репозиториях. Мгновенно отправляет уведомления в приватные и общие чаты.
 
 ## Возможности
 
@@ -31,7 +33,7 @@
 /help - Список доступных команд
 /start - Регистрация чата и запуск бота
 ```
-Основной командой для настройки связанных Gitlab репозиториев считается `/list`, кроме вывода списка можно удалять репозитори [#5](https://github.com/13Hz/gitlab-telegram-bot/pull/5) и устанавливать фильтрацию получаемых уведомлений по типу триггеров [#12](https://github.com/13Hz/gitlab-telegram-bot/pull/12)
+Основной командой для настройки связанных Gitlab репозиториев считается `/list`, кроме вывода списка можно удалять репозитории [#5](https://github.com/13Hz/gitlab-telegram-bot/pull/5) и устанавливать фильтрацию получаемых уведомлений по типу триггеров [#12](https://github.com/13Hz/gitlab-telegram-bot/pull/12)
 
 ![image](https://user-images.githubusercontent.com/39442071/234793687-73655f61-8bc2-4365-8d9f-f0f338c8fb11.png)
 
@@ -52,7 +54,7 @@ cp .env.example .env
 4. Создать телеграм-бот с помощью [@BotFather](https://t.me/BotFather)
 5. В Gitlab репозитории переходим в раздел `Webhooks` и создаем вебхук. Ссылка должна быть следующего формата: `https://example.com/hook`. 
 Здесь же нужно настроить триггеры и установить секретный токен
-6. Настроить `.env` файл, указав актульные данные для подключения к БД, параметры созданного бота (токен, имя), а так же токен Gitlab вебхука
+6. Настроить `.env` файл, указав актуальные данные для подключения к БД, параметры созданного бота (токен, имя), а так же токен Gitlab вебхука
 7. Сгенерировать ключ
 ```
 php artisan key:generate
