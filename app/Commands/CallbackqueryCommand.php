@@ -5,7 +5,6 @@ namespace App\Commands;
 use App\Factories\CallbackProcessFactory;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Request;
 
 class CallbackqueryCommand extends SystemCommand
 {
@@ -16,6 +15,7 @@ class CallbackqueryCommand extends SystemCommand
     public function execute(): ServerResponse
     {
         $query = $this->getCallbackQuery();
+
         return CallbackProcessFactory::factory($query)->process();
     }
 }

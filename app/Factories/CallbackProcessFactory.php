@@ -31,7 +31,7 @@ class CallbackProcessFactory
         if ($chat && $link) {
             $chatLink = $chatLinkService->getChatLinkByEntitiesId($chat, $link);
             if ($chatLink) {
-                return match($data['entity']) {
+                return match ($data['entity']) {
                     'link' => new LinkPressedProcess($query, $chat, $link, $chatLink),
                     'filter' => new FilterPressedProcess($query, $chat, $link, $chatLink),
                 };
