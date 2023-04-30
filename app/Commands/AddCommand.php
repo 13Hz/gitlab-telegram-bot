@@ -2,9 +2,8 @@
 
 namespace App\Commands;
 
-use App\Services\CharService;
+use App\Services\ChatService;
 use App\Services\TelegramChatService;
-use App\Traits\ParserTraits;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -21,10 +20,10 @@ class AddCommand extends UserCommand
         $message = $this->getMessage();
         $chatId = $message->getChat()->getId();
 
-        $chatService = new CharService();
+        $chatService = new ChatService();
         $telegramChatService = new TelegramChatService();
 
-        $chat = $chatService->createChat($chatId, $message->getChat()->type);
+        $chat = $chatService->getChatOrCreate($chatId, $message->getChat()->type);
 
         $data = [
             'chat_id' => $chatId,
