@@ -17,6 +17,6 @@ class CharService
 
     public function isChatExists(string|int $chatId): bool
     {
-        return Chat::where('chat_id', $chatId)->isNotEmpty();
+        return Chat::where('chat_id', $chatId)->get()->isNotEmpty();
     }
 }
