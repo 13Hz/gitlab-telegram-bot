@@ -1,0 +1,34 @@
+name: Check styling
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - '**.php'
+      - 'phpunit.xml'
+      - 'composer.json'
+      - 'composer.lock'
+
+jobs:
+  cs-fixer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.1'
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3.3.1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.json') }}
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run Pint
+        run: vendor/bin/pint
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Code style fix
