@@ -30,4 +30,4 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: [CS Fixer] Поправлен кодстайл
+          commit_message: Code style fix
