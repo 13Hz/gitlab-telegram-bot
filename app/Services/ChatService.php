@@ -25,7 +25,7 @@ class ChatService
 
     public function isChatExists(string|int $chatId): bool
     {
-        return Chat::where('chat_id', $chatId)->isNotEmpty();
+        return Chat::where('chat_id', $chatId)->get()->isNotEmpty();
     }
 
     public function getChatByChatId(string|int $chatId): Chat|null
