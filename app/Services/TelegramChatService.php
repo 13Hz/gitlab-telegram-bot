@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Chat;
-use App\Models\ChatLink;
 use App\Models\Core\ResultContainer;
 use App\Models\Link;
 use App\Traits\ParserTraits;
@@ -15,7 +14,7 @@ class TelegramChatService
     public function createChat(string|int $chatId, string $chatType): ResultContainer
     {
         $result = new ResultContainer();
-        $chatService = new CharService();
+        $chatService = new ChatService();
 
         if ($chatService->isChatExists($chatId)) {
             $result->setSuccess(false)->setMessage('Чат уже присутствует в базе');
