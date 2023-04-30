@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Models\Chat;
+use App\Services\TelegramChatService;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -19,27 +19,11 @@ class StartCommand extends UserCommand
         $message = $this->getMessage();
         $chat = $message->getChat();
 
-        $exist = Chat::where('chat_id', $chat->getId())->first();
-
-        if ($exist) {
-            $text = 'Чат уже присутствует в базе';
-        } else {
-            $model = Chat::create([
-                'chat_id' => $chat->getId(),
-                'type' => $chat->getType(),
-            ]);
-
-            if ($model) {
-                $text = "Чат успешно зарегистрирован\n";
-                $text .= 'Введите /help для получения списка доступных команд';
-            } else {
-                $text = 'Произошла ошибка при добавлении чата в базу';
-            }
-        }
+        $chatService = new TelegramChatService();
 
         $data = [
             'chat_id' => $chat->getId(),
-            'text' => $text,
+            'text' => $chatService->createChat($chat->getId(), $chat->getType())->getMessage(),
         ];
 
         return Request::sendMessage($data);
