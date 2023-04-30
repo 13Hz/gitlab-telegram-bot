@@ -71,6 +71,24 @@ class TelegramChatTest extends TestCase
                 }
 
                 $this->assertNotEmpty($linksButtons);
+            }
+        }
+    }
+
+    public function testBindLinkToChat()
+    {
+        $chat = Chat::factory()->create();
+
+        $telegramChatService = new TelegramChatService();
+
+        $testLink = 'https://gitlab.com/test/example/';
+        $bindResult = $telegramChatService->bindLinkToChat($chat, $testLink);
+
+        if ($bindResult->isSuccess()) {
+            $link = $chat->links()->first();
+            if ($link) {
+                $repositoryName = $link->repository_name;
+
                 $this->assertStringContainsString($repositoryName, $testLink);
             }
 
@@ -78,5 +96,17 @@ class TelegramChatTest extends TestCase
         }
 
         $this->assertTrue($bindResult->isSuccess());
+    }
+
+    public function testFailureBindLinkToChat()
+    {
+        $chat = Chat::factory()->create();
+
+        $telegramChatService = new TelegramChatService();
+
+        $testLink = 'test';
+        $bindResult = $telegramChatService->bindLinkToChat($chat, $testLink);
+
+        $this->assertFalse($bindResult->isSuccess());
     }
 }

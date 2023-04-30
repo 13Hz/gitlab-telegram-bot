@@ -9,8 +9,6 @@ class TelegramHookController extends Controller
 {
     public function handle(Request $request)
     {
-        $serviceBuilder = ServiceFactory::factory($request);
-
-        return $serviceBuilder->process();
+        return ServiceFactory::factory($request)->process();
     }
 }
