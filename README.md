@@ -1,7 +1,8 @@
 # ![image](https://user-images.githubusercontent.com/39442071/234793633-dc38d35e-6b8e-420a-92b6-744efb69eb80.png)
-![GitHub issues](https://img.shields.io/github/issues-raw/13Hz/gitlab-telegram-bot)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/13Hz/gitlab-telegram-bot)
-![GitHub](https://img.shields.io/github/license/13Hz/gitlab-telegram-bot)
+[![Actions](https://img.shields.io/github/actions/workflow/status/13Hz/gitlab-telegram-bot/tests.yaml?label=Tests)](https://github.com/13Hz/gitlab-telegram-bot/actions)
+[![GitHub issues](https://img.shields.io/github/issues-raw/13Hz/gitlab-telegram-bot)](https://github.com/13Hz/gitlab-telegram-bot/issues)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/13Hz/gitlab-telegram-bot)](https://github.com/13Hz/gitlab-telegram-bot/commits/main)
+[![GitHub](https://img.shields.io/github/license/13Hz/gitlab-telegram-bot)](https://github.com/13Hz/gitlab-telegram-bot/blob/main/LICENSE)
 [![Telegram](https://img.shields.io/static/v1?label=telegram&message=@not1s_bot&color=279fda)](https://t.me/not1s_bot)
 
 [Русский](https://github.com/13Hz/gitlab-telegram-bot/blob/main/README.md) | [English](https://github.com/13Hz/gitlab-telegram-bot/blob/main/README.eng.md)
