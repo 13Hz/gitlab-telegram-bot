@@ -27,4 +27,9 @@ class ChatService
     {
         return Chat::where('chat_id', $chatId)->isNotEmpty();
     }
+
+    public function getChatByChatId(string|int $chatId): Chat|null
+    {
+        return Chat::where('chat_id', $chatId)->first();
+    }
 }
