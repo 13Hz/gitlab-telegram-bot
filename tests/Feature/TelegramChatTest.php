@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Chat;
+use App\Services\ChatButtonService;
 use App\Services\TelegramChatService;
 use Tests\TestCase;
 
@@ -32,5 +33,50 @@ class TelegramChatTest extends TestCase
         $this->assertFalse($result->isSuccess());
         $this->assertDatabaseHas('chats', $chatData);
         $this->assertDatabaseMissing('chats', $newChatData);
+    }
+
+    public function testRepositoriesListCommand()
+    {
+        $chatButtonService = new ChatButtonService();
+        $telegramChatService = new TelegramChatService();
+
+        $chat = Chat::factory()->create();
+        $testLink = 'https://gitlab.com/test/example/';
+        $bindResult = $telegramChatService->bindLinkToChat($chat, $testLink);
+
+        if ($bindResult->isSuccess()) {
+            $link = $chat->links()->first();
+            if ($link) {
+                $repositoryName = $link->repository_name;
+                $linksButtons = $chatButtonService->getRepositoriesKeyboard($chat->chat_id);
+                if ($linksButtons) {
+                    $exists = false;
+                    $rawData = $linksButtons->getRawData();
+                    if (!empty($rawData['inline_keyboard'])) {
+                        foreach ($rawData['inline_keyboard'] as $buttons) {
+                            foreach ($buttons as $button) {
+                                if ($button->getText() === $repositoryName) {
+                                    $exists = true;
+                                    break;
+                                }
+                            }
+
+                            if ($exists) {
+                                break;
+                            }
+                        }
+                    }
+
+                    $this->assertTrue($exists);
+                }
+
+                $this->assertNotEmpty($linksButtons);
+                $this->assertStringContainsString($repositoryName, $testLink);
+            }
+
+            $this->assertNotEmpty($link);
+        }
+
+        $this->assertTrue($bindResult->isSuccess());
     }
 }
