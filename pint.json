@@ -5,6 +5,7 @@
         "trailing_comma_in_multiline": false,
         "class_attributes_separation": false,
         "Laravel/laravel_phpdoc_alignment": false,
+        "no_superfluous_phpdoc_tags": false,
         "array_syntax": {
             "syntax": "short"
         }
