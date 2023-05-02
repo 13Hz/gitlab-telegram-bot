@@ -68,9 +68,9 @@ php artisan storage:link
 ```
 php artisan migrate --seed
 ```
-10. Set a link to the webhook for the bot (**IMPORTANT!** an ssl certificate is required for the webhook to work). Here https://example.com/ is the link where the bot is located
+10. Set a link to the webhook for the bot (**IMPORTANT!** an ssl certificate is required for the webhook to work).
 ```
-php artisan telegram:webhook https://example.com/hook
+php artisan telegram:webhook
 ```
 
 After setting up the backend, you can start adding chats and links to repositories for notifications. To do this, you can use the command `/add <link>`
