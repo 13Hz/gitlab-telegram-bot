@@ -9,14 +9,16 @@ use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class WebhookCommand extends Command
 {
-    protected $signature = 'telegram:webhook {url}';
+    protected $signature = 'telegram:webhook';
     protected $description = 'Установка ссылки на webhook для телеграм бота';
 
     public function handle()
     {
         try {
+
+            $webhookUrl = $this->ask('По какому адресу находится Webhook?', url('/hook'));
             $telegram = Telegram::getInstance();
-            $result = $telegram->setWebhook($this->argument('url'), [
+            $result = $telegram->setWebhook($webhookUrl, [
                 'secret_token' => config('telegram.webhook.token')
             ]);
 
