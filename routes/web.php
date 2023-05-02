@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TelegramHookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/hook', [\App\Http\Controllers\TelegramHookController::class, 'handle']);
+Route::post('/hook', [TelegramHookController::class, 'handle']);
