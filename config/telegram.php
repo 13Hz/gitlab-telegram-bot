@@ -11,6 +11,6 @@ return [
     ],
     'webhook' => [
         'header' => env('TELEGRAM_WEBHOOK_TOKEN_HEADER', 'X-Telegram-Bot-Api-Secret-Token'),
-        'token' => env('TELEGRAM_WEBHOOK_TOKEN', md5(env('APP_KEY')))
+        'token' => env('TELEGRAM_WEBHOOK_TOKEN', hash('sha256', env('APP_KEY')))
     ],
 ];
