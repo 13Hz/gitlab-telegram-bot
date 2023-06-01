@@ -28,6 +28,7 @@ class Request
         $this->iid = match ($this->objectAttributes->noteable_type) {
             'MergeRequest' => $this->mergeRequest->iid,
             'Issue' => $this->issue->iid,
+            default => null,
         };
         $this->host = $host;
     }
