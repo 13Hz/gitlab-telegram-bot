@@ -6,14 +6,15 @@ use App\Models\Core\Json;
 
 class Request
 {
-    public null|string $type;
+    public ?string $type;
     public User $user;
     public Project $project;
     public ObjectAttributes $objectAttributes;
     public MergeRequest $mergeRequest;
     public Issue $issue;
     public Commit $commit;
-    public null|string $host;
+    public ?string $host;
+    public ?int $iid;
 
     public function __construct(Json $data, $host = null)
     {
@@ -24,7 +25,10 @@ class Request
         $this->mergeRequest = new MergeRequest(new Json($data->get('merge_request')));
         $this->issue = new Issue(new Json($data->get('issue')));
         $this->commit = new Commit(new Json($data->get('commit')));
-
+        $this->iid = match ($this->objectAttributes->noteable_type) {
+            'MergeRequest' => $this->mergeRequest->iid,
+            'Issue' => $this->issue->iid,
+        };
         $this->host = $host;
     }
 }

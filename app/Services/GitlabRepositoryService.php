@@ -2,15 +2,21 @@
 
 namespace App\Services;
 
+use App\Builders\NoteBuilder;
+use App\Models\Comment;
 use App\Models\Core\Telegram;
 use App\Models\CreatedObject;
 use App\Models\Gitlab\Request;
 use App\Models\Link;
 use App\Models\Trigger;
+use Carbon\Carbon;
 
 class GitlabRepositoryService
 {
     private Request $hookRequest;
+
+    const OBJECT_STATUS_OPEN = 'open';
+    const NOTE_TYPE = 'note';
 
     public function __construct(Request $hookRequest)
     {
@@ -75,6 +81,17 @@ class GitlabRepositoryService
         return $data;
     }
 
+    public function getTelegramEditMessageData(mixed $chatId, string $text, mixed $messageId): array
+    {
+        return [
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'text' => $text,
+            'parse_mode' => 'Markdown',
+            'disable_web_page_preview' => true
+        ];
+    }
+
     /**Отправка сообщений в чаты, связанные с репозиторием
      * @param Link $link Репозиторий
      * @param string $text Текст сообщения
@@ -86,6 +103,38 @@ class GitlabRepositoryService
         $chats = $this->getAvailableChatsByTriggerFilter($link, $this->hookRequest->type);
 
         foreach ($chats as $chat) {
+            if ($this->hookRequest->type === self::NOTE_TYPE) {
+                $mainComment = Comment::where([
+                    'author_id' => $this->hookRequest->user->id,
+                    'object_id' => $this->hookRequest->iid,
+                    'chat_id' => $chat->chat_id,
+                    'reference' => null
+                ])->where('updated_at', '>', Carbon::now()->subMinute())->first();
+
+                if ($mainComment) {
+                    Comment::create([
+                        'author_id' => $this->hookRequest->user->id,
+                        'object_id' => $this->hookRequest->iid,
+                        'chat_id' => $chat->chat_id,
+                        'message_id' => $mainComment->message_id,
+                        'reference' => $mainComment->id
+                    ]);
+                    $referencedCount = Comment::where([
+                        'reference' => $mainComment->id
+                    ])->count();
+
+                    $builder = new NoteBuilder($this->hookRequest);
+                    $builder->addRepositoryLink();
+                    $builder->addUserActionTextMultipleMessages($referencedCount + 1);
+
+                    Telegram::editMessage(
+                        $this->getTelegramEditMessageData($chat->chat_id, $builder->getText(), $mainComment->message_id)
+                    );
+
+                    continue;
+                }
+            }
+
             $trigger = Trigger::where('code', $this->hookRequest->type)->first();
             $replyMessageId = null;
 
@@ -105,14 +154,25 @@ class GitlabRepositoryService
 
             if ($response->isOk()) {
                 $ids[] = $chat->chat_id;
+                $messageId = $response->getResult()->getMessageId();
 
-                if ($this->hookRequest->objectAttributes->action === 'open' && $this->hookRequest->objectAttributes->iid
+                if ($this->hookRequest->objectAttributes->action === self::OBJECT_STATUS_OPEN
+                    && $this->hookRequest->objectAttributes->iid
                     && $this->hookRequest->type) {
                     CreatedObject::create([
                         'object_id' => $this->hookRequest->objectAttributes->iid,
                         'chat_id' => $chat->id,
-                        'message_id' => $response->getResult()->getMessageId(),
+                        'message_id' => $messageId,
                         'trigger_id' => $trigger->id
+                    ]);
+                }
+
+                if ($this->hookRequest->type === self::NOTE_TYPE) {
+                    Comment::create([
+                        'object_id' => $this->hookRequest->iid,
+                        'author_id' => $this->hookRequest->user->id,
+                        'chat_id' => $chat->chat_id,
+                        'message_id' => $messageId
                     ]);
                 }
             }
