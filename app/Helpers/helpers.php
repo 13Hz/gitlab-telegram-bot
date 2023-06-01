@@ -6,6 +6,7 @@ if (!function_exists('get_sqlite_db_path')) {
         $path = sys_get_temp_dir()."/$databaseName";
         if (!file_exists($path)) {
             touch($path);
+            chmod($path, 0777);
         }
 
         return $path;
