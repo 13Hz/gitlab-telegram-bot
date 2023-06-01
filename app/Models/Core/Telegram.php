@@ -26,4 +26,11 @@ class Telegram
 
         return Request::sendMessage($data);
     }
+
+    public static function editMessage($data): ServerResponse
+    {
+        Request::initialize(Telegram::getInstance());
+
+        return Request::editMessageText($data);
+    }
 }
