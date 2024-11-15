@@ -23,7 +23,7 @@ class Trigger
         return $this->request->project->path_with_namespace;
     }
 
-    public function getUserName(): string
+    public function getUserName(): ?string
     {
         return $this->request->user->username;
     }
